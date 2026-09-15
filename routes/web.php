@@ -13,12 +13,28 @@ Route::get('/dashboard', [DashboardController::class, 'index'])
     ->middleware(['auth', 'verified'])
     ->name('dashboard');
 
+use App\Http\Controllers\SuperAdmin\ActivityLogController;
+use App\Http\Controllers\SuperAdmin\AdminCabangController;
+use App\Http\Controllers\SuperAdmin\BranchController;
+
 // Super Admin Area
 Route::middleware(['auth', 'role:super-admin'])
     ->prefix('admin')
     ->name('admin.')
     ->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'adminDashboard'])->name('dashboard');
+
+        // Master Cabang
+        Route::patch('/branches/{branch}/toggle-status', [BranchController::class, 'toggleStatus'])->name('branches.toggle-status');
+        Route::resource('branches', BranchController::class)->except(['show']);
+
+        // Admin Cabang
+        Route::patch('/admins/{admin}/toggle-status', [AdminCabangController::class, 'toggleStatus'])->name('admins.toggle-status');
+        Route::resource('admins', AdminCabangController::class)->except(['show']);
+
+        // Log Aktivitas
+        Route::get('/logs', [ActivityLogController::class, 'index'])->name('logs.index');
+        Route::get('/logs/{log}', [ActivityLogController::class, 'show'])->name('logs.show');
     });
 
 // Admin Cabang Area

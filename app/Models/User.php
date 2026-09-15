@@ -6,11 +6,13 @@ namespace App\Models;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Attributes\Hidden;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
 #[Fillable(['name', 'email', 'password', 'branch_id', 'phone_number', 'avatar', 'status'])]
@@ -18,7 +20,7 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, HasRoles, Notifiable;
+    use HasApiTokens, HasFactory, HasRoles, Notifiable;
 
     /**
      * Get the attributes that should be cast.
@@ -79,5 +81,45 @@ class User extends Authenticatable
     public function isPeserta(): bool
     {
         return $this->hasRole('peserta');
+    }
+
+    /**
+     * Scope query untuk Super Admin
+     *
+     * @param  Builder<User>  $query
+     */
+    public function scopeSuperAdmins(Builder $query): Builder
+    {
+        return $query->role('super-admin');
+    }
+
+    /**
+     * Scope query untuk Admin Cabang
+     *
+     * @param  Builder<User>  $query
+     */
+    public function scopeAdminCabangs(Builder $query): Builder
+    {
+        return $query->role('admin-cabang');
+    }
+
+    /**
+     * Scope query untuk Trainer
+     *
+     * @param  Builder<User>  $query
+     */
+    public function scopeTrainers(Builder $query): Builder
+    {
+        return $query->role('trainer');
+    }
+
+    /**
+     * Scope query untuk Peserta
+     *
+     * @param  Builder<User>  $query
+     */
+    public function scopePesertas(Builder $query): Builder
+    {
+        return $query->role('peserta');
     }
 }
