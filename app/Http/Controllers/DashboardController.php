@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\ActivityLog;
 use App\Models\Branch;
+use App\Models\TrainingClass;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -57,10 +59,23 @@ class DashboardController extends Controller
     {
         $user = $request->user();
         $branch = $user->branch;
-        $trainersCount = $branch ? User::role('trainer')->where('branch_id', $branch->id)->count() : 0;
-        $studentsCount = $branch ? User::role('peserta')->where('branch_id', $branch->id)->count() : 0;
+        $branchId = $branch?->id;
 
-        return view('admin-cabang.dashboard', compact('user', 'branch', 'trainersCount', 'studentsCount'));
+        $trainersCount = $branchId ? User::role('trainer')->where('branch_id', $branchId)->count() : 0;
+        $classesCount = $branchId ? TrainingClass::where('branch_id', $branchId)->count() : 0;
+        $activeClassesCount = $branchId ? TrainingClass::where('branch_id', $branchId)->whereIn('status', ['open', 'ongoing'])->count() : 0;
+        $recentClasses = $branchId ? TrainingClass::where('branch_id', $branchId)->with(['trainer', 'sessions'])->latest()->take(5)->get() : collect();
+        $recentLogs = $branchId ? ActivityLog::where('branch_id', $branchId)->with('user')->latest()->take(5)->get() : collect();
+
+        return view('admin-cabang.dashboard', compact(
+            'user',
+            'branch',
+            'trainersCount',
+            'classesCount',
+            'activeClassesCount',
+            'recentClasses',
+            'recentLogs'
+        ));
     }
 
     /**

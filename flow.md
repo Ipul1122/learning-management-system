@@ -74,30 +74,30 @@ Dokumen ini berfungsi sebagai panduan kerja langkah demi langkah (*step-by-step 
 ### 🔹 FASE 2: Modul Pengguna Admin Cabang (Operasional Kelas & Trainer)
 > **Tujuan**: Admin Cabang menyiapkan infrastruktur pelatihan (trainer, kelas, aturan kapasitas, dan link zoom).
 
-- [ ] **Step 2.1: CRUD Trainer Cabang (Fitur PRD 2.1)**
-  - [ ] Form pembuatan akun Trainer di cabangnya.
-  - [ ] Daftar Trainer cabang beserta status aktif dan kelas yang diampu.
-  - [ ] Edit data profil & penonaktifan akun trainer.
-- [ ] **Step 2.2: Migrasi Tabel Kelas & Sesi**
-  - [ ] Tabel `classes`:
+- [x] **Step 2.1: CRUD Trainer Cabang (Fitur PRD 2.1)**
+  - [x] Form pembuatan akun Trainer di cabangnya.
+  - [x] Daftar Trainer cabang beserta status aktif dan kelas yang diampu.
+  - [x] Edit data profil & penonaktifan akun trainer.
+- [x] **Step 2.2: Migrasi Tabel Kelas & Sesi**
+  - [x] Tabel `classes`:
     - `type`: `offline`, `online`, `hybrid`.
     - `offline_capacity`: default/maksimal 40 orang.
     - `online_capacity`: kapasitas fleksibel (ratusan).
     - `required_jp`: default 20 JP.
-  - [ ] Tabel `class_schedules` / `sessions`:
+  - [x] Tabel `class_schedules` / `sessions`:
     - Relasi ke kelas, judul sesi, `jp_duration`, tanggal/jam sesi, `zoom_meeting_url`.
-- [ ] **Step 2.3: CRUD Kelas (Fitur PRD 2.6)**
-  - [ ] Form pembuatan kelas baru:
+- [x] **Step 2.3: CRUD Kelas (Fitur PRD 2.6)**
+  - [x] Form pembuatan kelas baru:
     - Input tipe kelas (Offline / Online / Hybrid).
     *Validasi UI: Jika Offline, kapasitas terkunci maksimal 40 orang.*
     *Jika Hybrid: Input kuota fisik (maks 40) + kuota online (ratusan).*
-  - [ ] Penugasan Trainer penanggung jawab kelas.
-  - [ ] Pengaturan status kelas (*Draft*, *Pendaftaran Buka*, *Berjalan*, *Selesai*).
-- [ ] **Step 2.4: Input Jadwal Sesi & Link Zoom (Fitur PRD 2.3)**
-  - [ ] Input sesi pembelajaran per kelas (misal: Sesi 1: 2 JP, Sesi 2: 3 JP).
-  - [ ] Input URL Meeting Zoom, Meeting ID, dan Passcode pada masing-masing sesi.
-- [ ] **Step 2.5: Log Aktivitas Internal Cabang (Fitur PRD 2.4)**
-  - [ ] Halaman log aktivitas khusus lingkup cabang terkait bagi Admin Cabang.
+  - [x] Penugasan Trainer penanggung jawab kelas.
+  - [x] Pengaturan status kelas (*Draft*, *Pendaftaran Buka*, *Berjalan*, *Selesai*).
+- [x] **Step 2.4: Input Jadwal Sesi & Link Zoom (Fitur PRD 2.3)**
+  - [x] Input sesi pembelajaran per kelas (misal: Sesi 1: 2 JP, Sesi 2: 3 JP).
+  - [x] Input URL Meeting Zoom, Meeting ID, dan Passcode pada masing-masing sesi.
+- [x] **Step 2.5: Log Aktivitas Internal Cabang (Fitur PRD 2.4)**
+  - [x] Halaman log aktivitas khusus lingkup cabang terkait bagi Admin Cabang.
 
 ---
 

@@ -39,4 +39,12 @@ class Branch extends Model
     {
         return $this->hasMany(ActivityLog::class);
     }
+
+    /**
+     * Seluruh kelas pelatihan yang diselenggarakan cabang ini.
+     */
+    public function classes(): HasMany
+    {
+        return $this->hasMany(TrainingClass::class);
+    }
 }

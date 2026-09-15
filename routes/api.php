@@ -56,3 +56,33 @@ Route::prefix('v1/super-admin')
         Route::get('logs', [ActivityLogApiController::class, 'index'])->name('logs.index');
         Route::get('logs/{log}', [ActivityLogApiController::class, 'show'])->name('logs.show');
     });
+
+use App\Http\Controllers\Api\V1\AdminCabang\ActivityLogApiController as CabangActivityLogApiController;
+use App\Http\Controllers\Api\V1\AdminCabang\ClassApiController as CabangClassApiController;
+use App\Http\Controllers\Api\V1\AdminCabang\ClassSessionApiController as CabangClassSessionApiController;
+use App\Http\Controllers\Api\V1\AdminCabang\TrainerApiController as CabangTrainerApiController;
+
+// V1 Admin Cabang APIs
+Route::prefix('v1/admin-cabang')
+    ->middleware(['auth:sanctum', 'role:admin-cabang'])
+    ->name('api.v1.admin-cabang.')
+    ->group(function () {
+        // Master Trainer Cabang
+        Route::patch('trainers/{trainer}/toggle-status', [CabangTrainerApiController::class, 'toggleStatus'])->name('trainers.toggle-status');
+        Route::apiResource('trainers', CabangTrainerApiController::class);
+
+        // Kelas Pelatihan
+        Route::patch('classes/{class}/update-status', [CabangClassApiController::class, 'updateStatus'])->name('classes.update-status');
+        Route::apiResource('classes', CabangClassApiController::class);
+
+        // Sesi Pertemuan Kelas & Zoom
+        Route::get('classes/{class}/sessions', [CabangClassSessionApiController::class, 'index'])->name('classes.sessions.index');
+        Route::post('classes/{class}/sessions', [CabangClassSessionApiController::class, 'store'])->name('classes.sessions.store');
+        Route::get('classes/{class}/sessions/{session}', [CabangClassSessionApiController::class, 'show'])->name('classes.sessions.show');
+        Route::put('classes/{class}/sessions/{session}', [CabangClassSessionApiController::class, 'update'])->name('classes.sessions.update');
+        Route::delete('classes/{class}/sessions/{session}', [CabangClassSessionApiController::class, 'destroy'])->name('classes.sessions.destroy');
+
+        // Log Aktivitas Internal Cabang
+        Route::get('logs', [CabangActivityLogApiController::class, 'index'])->name('logs.index');
+        Route::get('logs/{log}', [CabangActivityLogApiController::class, 'show'])->name('logs.show');
+    });
