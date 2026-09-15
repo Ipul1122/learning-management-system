@@ -37,12 +37,35 @@ Route::middleware(['auth', 'role:super-admin'])
         Route::get('/logs/{log}', [ActivityLogController::class, 'show'])->name('logs.show');
     });
 
+use App\Http\Controllers\AdminCabang\ActivityLogController as CabangActivityLogController;
+use App\Http\Controllers\AdminCabang\ClassController as CabangClassController;
+use App\Http\Controllers\AdminCabang\ClassSessionController as CabangClassSessionController;
+use App\Http\Controllers\AdminCabang\TrainerController as CabangTrainerController;
+
 // Admin Cabang Area
 Route::middleware(['auth', 'role:admin-cabang'])
     ->prefix('cabang')
     ->name('cabang.')
     ->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'cabangDashboard'])->name('dashboard');
+
+        // Master Trainer Cabang
+        Route::patch('trainers/{trainer}/toggle-status', [CabangTrainerController::class, 'toggleStatus'])->name('trainers.toggle-status');
+        Route::resource('trainers', CabangTrainerController::class)->except(['show']);
+
+        // Kelas Pelatihan
+        Route::patch('classes/{class}/update-status', [CabangClassController::class, 'updateStatus'])->name('classes.update-status');
+        Route::resource('classes', CabangClassController::class);
+
+        // Sesi Pertemuan Kelas & Zoom Meeting
+        Route::post('classes/{class}/sessions', [CabangClassSessionController::class, 'store'])->name('sessions.store');
+        Route::get('classes/{class}/sessions/{session}/edit', [CabangClassSessionController::class, 'edit'])->name('sessions.edit');
+        Route::put('classes/{class}/sessions/{session}', [CabangClassSessionController::class, 'update'])->name('sessions.update');
+        Route::delete('classes/{class}/sessions/{session}', [CabangClassSessionController::class, 'destroy'])->name('sessions.destroy');
+
+        // Log Aktivitas Internal Cabang
+        Route::get('logs', [CabangActivityLogController::class, 'index'])->name('logs.index');
+        Route::get('logs/{log}', [CabangActivityLogController::class, 'show'])->name('logs.show');
     });
 
 // Trainer Area

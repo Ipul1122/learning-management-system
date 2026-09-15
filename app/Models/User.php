@@ -52,6 +52,14 @@ class User extends Authenticatable
     }
 
     /**
+     * Seluruh kelas pelatihan yang diampu oleh instruktur/trainer ini.
+     */
+    public function assignedClasses(): HasMany
+    {
+        return $this->hasMany(TrainingClass::class, 'trainer_id');
+    }
+
+    /**
      * Helper cek peran super admin
      */
     public function isSuperAdmin(): bool

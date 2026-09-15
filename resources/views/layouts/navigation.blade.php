@@ -32,6 +32,18 @@
                             {{ __('Log Aktivitas') }}
                         </x-nav-link>
                     @endrole
+
+                    @role('admin-cabang')
+                        <x-nav-link :href="route('cabang.trainers.index')" :active="request()->routeIs('cabang.trainers.*')">
+                            {{ __('Trainer Cabang') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('cabang.classes.index')" :active="request()->routeIs('cabang.classes.*') || request()->routeIs('cabang.sessions.*')">
+                            {{ __('Kelas Pelatihan') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('cabang.logs.index')" :active="request()->routeIs('cabang.logs.*')">
+                            {{ __('Log Aktivitas') }}
+                        </x-nav-link>
+                    @endrole
                 </div>
             </div>
 
@@ -111,6 +123,18 @@
                     {{ __('Admin Cabang') }}
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('admin.logs.index')" :active="request()->routeIs('admin.logs.*')">
+                    {{ __('Log Aktivitas') }}
+                </x-responsive-nav-link>
+            @endrole
+
+            @role('admin-cabang')
+                <x-responsive-nav-link :href="route('cabang.trainers.index')" :active="request()->routeIs('cabang.trainers.*')">
+                    {{ __('Trainer Cabang') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('cabang.classes.index')" :active="request()->routeIs('cabang.classes.*') || request()->routeIs('cabang.sessions.*')">
+                    {{ __('Kelas Pelatihan') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('cabang.logs.index')" :active="request()->routeIs('cabang.logs.*')">
                     {{ __('Log Aktivitas') }}
                 </x-responsive-nav-link>
             @endrole
