@@ -1,0 +1,86 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use App\Models\Branch;
+use App\Models\User;
+use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
+use Illuminate\View\View;
+
+class DashboardController extends Controller
+{
+    /**
+     * Dispatcher utama: Mengarahkan pengguna ke dashboard sesuai perannya.
+     */
+    public function index(Request $request): View|RedirectResponse
+    {
+        $user = $request->user();
+
+        if ($user->hasRole('super-admin')) {
+            return redirect()->route('admin.dashboard');
+        }
+
+        if ($user->hasRole('admin-cabang')) {
+            return redirect()->route('cabang.dashboard');
+        }
+
+        if ($user->hasRole('trainer')) {
+            return redirect()->route('trainer.dashboard');
+        }
+
+        return $this->pesertaDashboard($request);
+    }
+
+    /**
+     * Dashboard untuk Super Administrator.
+     */
+    public function adminDashboard(Request $request): View
+    {
+        $branchesCount = Branch::count();
+        $adminsCount = User::role('admin-cabang')->count();
+        $trainersCount = User::role('trainer')->count();
+        $studentsCount = User::role('peserta')->count();
+
+        return view('dashboard.admin', compact(
+            'branchesCount',
+            'adminsCount',
+            'trainersCount',
+            'studentsCount'
+        ));
+    }
+
+    /**
+     * Dashboard untuk Admin Cabang.
+     */
+    public function cabangDashboard(Request $request): View
+    {
+        $user = $request->user();
+        $branch = $user->branch;
+        $trainersCount = $branch ? User::role('trainer')->where('branch_id', $branch->id)->count() : 0;
+        $studentsCount = $branch ? User::role('peserta')->where('branch_id', $branch->id)->count() : 0;
+
+        return view('dashboard.cabang', compact('user', 'branch', 'trainersCount', 'studentsCount'));
+    }
+
+    /**
+     * Dashboard untuk Trainer.
+     */
+    public function trainerDashboard(Request $request): View
+    {
+        $user = $request->user();
+        $branch = $user->branch;
+
+        return view('dashboard.trainer', compact('user', 'branch'));
+    }
+
+    /**
+     * Dashboard untuk Peserta (Default).
+     */
+    public function pesertaDashboard(Request $request): View
+    {
+        $user = $request->user();
+
+        return view('dashboard.peserta', compact('user'));
+    }
+}
