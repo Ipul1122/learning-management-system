@@ -42,7 +42,7 @@ class DashboardController extends Controller
         $trainersCount = User::role('trainer')->count();
         $studentsCount = User::role('peserta')->count();
 
-        return view('dashboard.admin', compact(
+        return view('super-admin.dashboard', compact(
             'branchesCount',
             'adminsCount',
             'trainersCount',
@@ -60,7 +60,7 @@ class DashboardController extends Controller
         $trainersCount = $branch ? User::role('trainer')->where('branch_id', $branch->id)->count() : 0;
         $studentsCount = $branch ? User::role('peserta')->where('branch_id', $branch->id)->count() : 0;
 
-        return view('dashboard.cabang', compact('user', 'branch', 'trainersCount', 'studentsCount'));
+        return view('admin-cabang.dashboard', compact('user', 'branch', 'trainersCount', 'studentsCount'));
     }
 
     /**
@@ -71,7 +71,7 @@ class DashboardController extends Controller
         $user = $request->user();
         $branch = $user->branch;
 
-        return view('dashboard.trainer', compact('user', 'branch'));
+        return view('trainer.dashboard', compact('user', 'branch'));
     }
 
     /**
@@ -81,6 +81,6 @@ class DashboardController extends Controller
     {
         $user = $request->user();
 
-        return view('dashboard.peserta', compact('user'));
+        return view('peserta.dashboard', compact('user'));
     }
 }

@@ -20,6 +20,18 @@
                     <x-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard') || request()->routeIs('admin.dashboard') || request()->routeIs('cabang.dashboard') || request()->routeIs('trainer.dashboard')">
                         {{ __('Dashboard') }}
                     </x-nav-link>
+
+                    @role('super-admin')
+                        <x-nav-link :href="route('admin.branches.index')" :active="request()->routeIs('admin.branches.*')">
+                            {{ __('Master Cabang') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.admins.index')" :active="request()->routeIs('admin.admins.*')">
+                            {{ __('Admin Cabang') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('admin.logs.index')" :active="request()->routeIs('admin.logs.*')">
+                            {{ __('Log Aktivitas') }}
+                        </x-nav-link>
+                    @endrole
                 </div>
             </div>
 
@@ -87,9 +99,21 @@
     <!-- Responsive Navigation Menu -->
     <div :class="{'block': open, 'hidden': ! open}" class="hidden sm:hidden">
         <div class="pt-2 pb-3 space-y-1">
-            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard')">
+            <x-responsive-nav-link :href="route('dashboard')" :active="request()->routeIs('dashboard') || request()->routeIs('admin.dashboard')">
                 {{ __('Dashboard') }}
             </x-responsive-nav-link>
+
+            @role('super-admin')
+                <x-responsive-nav-link :href="route('admin.branches.index')" :active="request()->routeIs('admin.branches.*')">
+                    {{ __('Master Cabang') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.admins.index')" :active="request()->routeIs('admin.admins.*')">
+                    {{ __('Admin Cabang') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('admin.logs.index')" :active="request()->routeIs('admin.logs.*')">
+                    {{ __('Log Aktivitas') }}
+                </x-responsive-nav-link>
+            @endrole
         </div>
 
         <!-- Responsive Settings Options -->

@@ -10,7 +10,7 @@ Dokumen ini berfungsi sebagai panduan kerja langkah demi langkah (*step-by-step 
 | Modul / Fase | Target Deliverable | Status |
 | :--- | :--- | :---: |
 | **Fase 0** | Fondasi Database, Multi-Role (RBAC) & Seeder Awal | `[x] Selesai` |
-| **Fase 1** | Modul Super Admin (Cabang, Admin Cabang, Log Global) | `[ ] Belum Mulai` |
+| **Fase 1** | Modul Super Admin (Cabang, Admin Cabang, Log Global) | `[x] Selesai` |
 | **Fase 2** | Modul Admin Cabang (Trainer, Kelas 40/Ratusan, Link Zoom) | `[ ] Belum Mulai` |
 | **Fase 3** | Modul Trainer (Bank Soal, Kuis, Sesi Zoom) | `[ ] Belum Mulai` |
 | **Fase 4** | Modul Peserta (Pilih Kelas, 1-Click Zoom, Tracking 20 JP) | `[ ] Belum Mulai` |
@@ -50,20 +50,24 @@ Dokumen ini berfungsi sebagai panduan kerja langkah demi langkah (*step-by-step 
 ### 🔹 FASE 1: Modul Pengguna Super Admin (Root Hierarki)
 > **Tujuan**: Super Admin dapat mengelola master cabang, membuat akun admin cabang, dan melihat audit trail.
 
-- [ ] **Step 1.1: CRUD Master Cabang (Branches)**
-  - [ ] List cabang dengan status keaktifan & statistik jumlah kelas/trainer.
-  - [ ] Form Tambah, Edit, dan Non-aktifkan cabang.
-- [ ] **Step 1.2: CRUD Akun Admin Cabang (Fitur PRD 1.1)**
-  - [ ] Tambah akun Admin Cabang baru + pilih cabang penugasan.
-  - [ ] Daftar Admin Cabang dengan filter cabang dan status.
-  - [ ] Edit profil, ubah penugasan cabang, atau reset password admin cabang.
-  - [ ] Hapus / Non-aktifkan akun admin cabang.
-- [ ] **Step 1.3: Log Aktivitas Admin (Fitur PRD 1.2)**
-  - [ ] Halaman pemantauan log aktivitas global bagi Super Admin.
-  - [ ] Filter berdasarkan rentang tanggal, admin, cabang, dan tipe aksi.
-  - [ ] Modal detail inspeksi perubahan data (*old value vs new value*).
-- [ ] **Step 1.4: Service / Observer Auto-Logging**
-  - [ ] Membuat helper / model observer untuk mencatat setiap mutasi data penting ke `activity_logs`.
+- [x] **Step 1.1: CRUD Master Cabang (Branches)**
+  - [x] List cabang dengan status keaktifan & statistik jumlah pengguna/kelas.
+  - [x] Form Tambah, Edit, dan Non-aktifkan (toggle) cabang.
+  - [x] Proteksi penghapusan cabang yang memiliki relasi pengguna.
+  - [x] RESTful API v1 Cabang (`/api/v1/super-admin/branches`) dengan `BranchResource`.
+- [x] **Step 1.2: CRUD Akun Admin Cabang (Fitur PRD 1.1)**
+  - [x] Tambah akun Admin Cabang baru + pilih cabang penugasan.
+  - [x] Daftar Admin Cabang dengan filter cabang dan status.
+  - [x] Edit profil, ubah penugasan cabang, atau reset password admin cabang.
+  - [x] Hapus & toggle status keaktifan akun admin cabang.
+  - [x] RESTful API v1 Admin Cabang (`/api/v1/super-admin/admins`) dengan `AdminCabangResource`.
+- [x] **Step 1.3: Log Aktivitas Admin (Fitur PRD 1.2)**
+  - [x] Halaman pemantauan log aktivitas global bagi Super Admin.
+  - [x] Filter berdasarkan rentang tanggal, admin, cabang, dan tipe aksi (CREATE, UPDATE, DELETE).
+  - [x] Modal detail inspeksi perubahan data (*old value vs new value*).
+  - [x] RESTful API v1 Activity Log (`/api/v1/super-admin/logs`) dengan `ActivityLogResource`.
+- [x] **Step 1.4: Service / Helper Auto-Logging**
+  - [x] Pencatatan audit trail otomatis via `ActivityLog::record(...)` pada setiap mutasi Web & REST API.
 
 ---
 

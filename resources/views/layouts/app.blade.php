@@ -33,5 +33,31 @@
                 {{ $slot }}
             </main>
         </div>
+
+        @if(session('success'))
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    if (window.Toast) {
+                        window.Toast.fire({
+                            icon: 'success',
+                            title: {!! json_encode(session('success')) !!}
+                        });
+                    }
+                });
+            </script>
+        @endif
+        @if(session('error'))
+            <script>
+                document.addEventListener('DOMContentLoaded', () => {
+                    if (window.Toast) {
+                        window.Toast.fire({
+                            icon: 'error',
+                            title: {!! json_encode(session('error')) !!}
+                        });
+                    }
+                });
+            </script>
+        @endif
+        @stack('scripts')
     </body>
 </html>
