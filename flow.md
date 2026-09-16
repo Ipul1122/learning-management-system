@@ -153,18 +153,20 @@ Dokumen ini berfungsi sebagai panduan kerja langkah demi langkah (*step-by-step 
 ### 🔹 FASE 5: Verifikasi Kelulusan 20 JP & Penerbitan Sertifikat
 > **Tujuan**: Siklus penutupan kelulusan pelatihan melalui persetujuan Trainer dan penyerahan sertifikat.
 
-- [ ] **Step 5.1: Pengajuan Kelulusan Otomatis**
-  - [ ] Jika peserta telah genap menyelesaikan akumulasi 20 JP (900 menit) dan seluruh kuis tuntas, status pendaftaran otomatis berubah menjadi `review_pending` (*Menunggu Verifikasi Trainer*).
-- [ ] **Step 5.2: Dashboard Review & Approval Trainer (Fitur PRD 3.5)**
-  - [ ] Trainer membuka daftar antrean peserta yang mengajukan kelulusan.
-  - [ ] Trainer memeriksa rekapitulasi: Total JP, kehadiran sesi, dan nilai kuis.
-  - [ ] **Aksi Trainer**:
+- [x] **Step 5.1: Pengajuan Kelulusan Otomatis**
+  - [x] Jika peserta telah genap menyelesaikan akumulasi 20 JP (900 menit) dan seluruh kuis tuntas, status pendaftaran otomatis berubah menjadi `review_pending` (*Menunggu Verifikasi Trainer*).
+- [x] **Step 5.2: Dashboard Review & Approval Trainer (Fitur PRD 3.5)**
+  - [x] Trainer membuka daftar antrean peserta yang mengajukan kelulusan.
+  - [x] Trainer memeriksa rekapitulasi: Total JP, kehadiran sesi, dan nilai kuis.
+  - [x] **Aksi Trainer**:
     - **Terima (Approve)** $\rightarrow$ Peserta resmi berstatus `graduated` (Lulus).
     - **Tolak (Reject)** $\rightarrow$ Peserta berstatus `rejected` / wajib remedial. Trainer wajib menginput form alasan penolakan & instruksi perbaikan materi.
-- [ ] **Step 5.3: Generator E-Sertifikat Digital (PDF + QR Code)**
-  - [ ] Template sertifikat profesional dengan `barryvdh/laravel-dompdf`.
-  - [ ] Penyematan QR Code verifikasi keaslian sertifikat dengan `simplesoftwareio/simple-qrcode`.
-  - [ ] Download E-Sertifikat di dashboard peserta yang telah disetujui (Lulus).
+- [x] **Step 5.3: Generator E-Sertifikat Digital (PDF + QR Code)**
+  - [x] Template sertifikat profesional dengan `barryvdh/laravel-dompdf`.
+  - [x] Penyematan QR Code verifikasi keaslian sertifikat dengan `simplesoftwareio/simple-qrcode`.
+  - [x] Download E-Sertifikat di dashboard peserta yang telah disetujui (Lulus).
+  - [x] Halaman verifikasi publik keabsahan sertifikat berbasis QR Code (`/certificates/verify/{certificate_number}`).
+  - [x] REST API v1 Sanctum untuk Trainer Review dan Peserta Certificates.
 
 ---
 

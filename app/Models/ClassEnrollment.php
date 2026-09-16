@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class ClassEnrollment extends Model
 {
@@ -84,6 +85,14 @@ class ClassEnrollment extends Model
     }
 
     /**
+     * Pengajuan kelulusan & verifikasi 20 JP untuk sertifikat.
+     */
+    public function graduationSubmission(): HasOne
+    {
+        return $this->hasOne(GraduationSubmission::class, 'enrollment_id');
+    }
+
+    /**
      * Tambahkan akumulasi menit belajar dan sinkronkan JP (1 JP = 45 menit).
      */
     public function addMinutes(int $minutes): void
@@ -91,13 +100,81 @@ class ClassEnrollment extends Model
         $this->accumulated_minutes += $minutes;
         $this->accumulated_jp = round($this->accumulated_minutes / 45, 1);
 
-        // Jika telah memenuhi syarat 20 JP dan status belum review_pending / graduated
-        if ($this->isCompletedJp() && in_array($this->status, ['enrolled', 'in_progress'])) {
-            $this->status = 'review_pending';
-        } elseif ($this->status === 'enrolled' && $this->accumulated_minutes > 0) {
+        if ($this->status === 'enrolled' && $this->accumulated_minutes > 0) {
             $this->status = 'in_progress';
         }
 
         $this->save();
+
+        // Otomatis cek dan ajukan review jika telah mencapai target 20 JP (900 menit)
+        if ($this->isCompletedJp()) {
+            $this->checkAndSubmitGraduation();
+        }
+    }
+
+    /**
+     * Accessor untuk total_minutes_accumulated.
+     */
+    public function getTotalMinutesAccumulatedAttribute(): int
+    {
+        return $this->accumulated_minutes ?? 0;
+    }
+
+    /**
+     * Accessor untuk total_jp_accumulated.
+     */
+    public function getTotalJpAccumulatedAttribute(): float
+    {
+        return $this->accumulated_jp ?? 0.0;
+    }
+
+    /**
+     * Periksa dan ajukan kelulusan secara otomatis jika syarat 20 JP telah terpenuhi.
+     */
+    public function checkAndSubmitGraduation(): ?GraduationSubmission
+    {
+        if (! $this->isCompletedJp()) {
+            return null;
+        }
+
+        $submission = GraduationSubmission::where('enrollment_id', $this->id)->first();
+
+        // Hitung rata-rata nilai kuis pada kelas ini
+        $classQuizIds = $this->trainingClass->quizzes()->pluck('id');
+        $avgScore = 0.00;
+
+        if ($classQuizIds->isNotEmpty()) {
+            $avgScore = (float) QuizAttempt::whereIn('quiz_id', $classQuizIds)
+                ->where('user_id', $this->user_id)
+                ->whereNotNull('submitted_at')
+                ->avg('total_score') ?? 0.00;
+        }
+
+        $trainerId = $this->trainingClass?->trainer_id;
+
+        if (! $submission) {
+            $submission = GraduationSubmission::create([
+                'enrollment_id' => $this->id,
+                'trainer_id' => $trainerId,
+                'total_jp_earned' => $this->accumulated_jp,
+                'avg_quiz_score' => round($avgScore, 2),
+                'status' => 'pending',
+            ]);
+
+            $this->update(['status' => 'review_pending']);
+        } elseif ($submission->status === 'rejected') {
+            // Remedial update
+            $submission->update([
+                'total_jp_earned' => $this->accumulated_jp,
+                'avg_quiz_score' => round($avgScore, 2),
+                'status' => 'pending',
+                'trainer_feedback' => null,
+                'reviewed_at' => null,
+            ]);
+
+            $this->update(['status' => 'review_pending']);
+        }
+
+        return $submission;
     }
 }

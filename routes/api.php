@@ -1,8 +1,20 @@
 <?php
 
+use App\Http\Controllers\Api\V1\AdminCabang\ActivityLogApiController as CabangActivityLogApiController;
+use App\Http\Controllers\Api\V1\AdminCabang\ClassApiController as CabangClassApiController;
+use App\Http\Controllers\Api\V1\AdminCabang\ClassSessionApiController as CabangClassSessionApiController;
+use App\Http\Controllers\Api\V1\AdminCabang\TrainerApiController as CabangTrainerApiController;
+use App\Http\Controllers\Api\V1\Peserta\ClassCatalogApiController;
+use App\Http\Controllers\Api\V1\Peserta\GraduationApiController;
+use App\Http\Controllers\Api\V1\Peserta\QuizAttemptApiController;
+use App\Http\Controllers\Api\V1\Peserta\StudyRoomApiController;
 use App\Http\Controllers\Api\V1\SuperAdmin\ActivityLogApiController;
 use App\Http\Controllers\Api\V1\SuperAdmin\AdminCabangApiController;
 use App\Http\Controllers\Api\V1\SuperAdmin\BranchApiController;
+use App\Http\Controllers\Api\V1\Trainer\ClassScheduleApiController;
+use App\Http\Controllers\Api\V1\Trainer\GraduationReviewApiController;
+use App\Http\Controllers\Api\V1\Trainer\QuestionBankApiController;
+use App\Http\Controllers\Api\V1\Trainer\QuizApiController;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
@@ -57,11 +69,6 @@ Route::prefix('v1/super-admin')
         Route::get('logs/{log}', [ActivityLogApiController::class, 'show'])->name('logs.show');
     });
 
-use App\Http\Controllers\Api\V1\AdminCabang\ActivityLogApiController as CabangActivityLogApiController;
-use App\Http\Controllers\Api\V1\AdminCabang\ClassApiController as CabangClassApiController;
-use App\Http\Controllers\Api\V1\AdminCabang\ClassSessionApiController as CabangClassSessionApiController;
-use App\Http\Controllers\Api\V1\AdminCabang\TrainerApiController as CabangTrainerApiController;
-
 // V1 Admin Cabang APIs
 Route::prefix('v1/admin-cabang')
     ->middleware(['auth:sanctum', 'role:admin-cabang'])
@@ -87,10 +94,6 @@ Route::prefix('v1/admin-cabang')
         Route::get('logs/{log}', [CabangActivityLogApiController::class, 'show'])->name('logs.show');
     });
 
-use App\Http\Controllers\Api\V1\Trainer\ClassScheduleApiController;
-use App\Http\Controllers\Api\V1\Trainer\QuestionBankApiController;
-use App\Http\Controllers\Api\V1\Trainer\QuizApiController;
-
 // V1 Trainer APIs
 Route::prefix('v1/trainer')
     ->middleware(['auth:sanctum', 'role:trainer'])
@@ -106,13 +109,15 @@ Route::prefix('v1/trainer')
         Route::get('classes', [ClassScheduleApiController::class, 'index'])->name('classes.index');
         Route::get('classes/{class}', [ClassScheduleApiController::class, 'show'])->name('classes.show');
         Route::patch('classes/{class}/sessions/{session}/zoom', [ClassScheduleApiController::class, 'updateZoom'])->name('classes.sessions.zoom');
+
+        // Verifikasi Kelulusan 20 JP & Sertifikat (Fase 5: PRD 3.5)
+        Route::get('graduations', [GraduationReviewApiController::class, 'index'])->name('graduations.index');
+        Route::get('graduations/{submission}', [GraduationReviewApiController::class, 'show'])->name('graduations.show');
+        Route::post('graduations/{submission}/approve', [GraduationReviewApiController::class, 'approve'])->name('graduations.approve');
+        Route::post('graduations/{submission}/reject', [GraduationReviewApiController::class, 'reject'])->name('graduations.reject');
     });
 
-use App\Http\Controllers\Api\V1\Peserta\ClassCatalogApiController;
-use App\Http\Controllers\Api\V1\Peserta\QuizAttemptApiController;
-use App\Http\Controllers\Api\V1\Peserta\StudyRoomApiController;
-
-// V1 Peserta APIs (Fase 4: PRD 4.1 - 4.6)
+// V1 Peserta APIs (Fase 4 & 5: PRD 4.1 - 4.6)
 Route::prefix('v1/peserta')
     ->middleware(['auth:sanctum', 'role:peserta'])
     ->name('api.v1.peserta.')
@@ -130,5 +135,12 @@ Route::prefix('v1/peserta')
         // Kuis Interaktif & Auto-Grading
         Route::get('study/{class}/quizzes/{quiz}', [QuizAttemptApiController::class, 'show'])->name('quizzes.show');
         Route::post('study/{class}/quizzes/{quiz}/start', [QuizAttemptApiController::class, 'start'])->name('quizzes.start');
-        Route::post('study/{class}/quizzes/{quiz}/attempts/{attempt}/submit', [QuizAttemptApiController::class, 'submit'])->name('quizzes.submit');
+        Route::get('study/{class}/quizzes/{quiz}/take/{attempt}', [QuizAttemptApiController::class, 'take'])->name('quizzes.take');
+        Route::post('study/{class}/quizzes/{quiz}/submit/{attempt}', [QuizAttemptApiController::class, 'submit'])->name('quizzes.submit');
+        Route::get('study/{class}/quizzes/{quiz}/result/{attempt}', [QuizAttemptApiController::class, 'result'])->name('quizzes.result');
+
+        // Sertifikat & Kelulusan (Fase 5: PRD 4.5)
+        Route::get('certificates', [GraduationApiController::class, 'index'])->name('certificates.index');
+        Route::get('certificates/{submission}', [GraduationApiController::class, 'show'])->name('certificates.show');
+        Route::get('certificates/{submission}/download', [GraduationApiController::class, 'download'])->name('certificates.download');
     });
