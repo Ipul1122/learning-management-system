@@ -2,8 +2,8 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreForumReplyRequest;
-use App\Http\Requests\StoreForumThreadRequest;
+use App\Http\Requests\Forum\StoreForumReplyRequest;
+use App\Http\Requests\Forum\StoreForumThreadRequest;
 use App\Models\ForumReply;
 use App\Models\ForumThread;
 use App\Models\TrainingClass;
@@ -26,7 +26,8 @@ class ClassForumController extends Controller
             ->with(['author'])
             ->withCount('replies')
             ->pinnedFirst()
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
         return view('forums.index', compact('class', 'threads'));
     }

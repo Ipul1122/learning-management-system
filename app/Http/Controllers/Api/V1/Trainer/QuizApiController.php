@@ -40,7 +40,7 @@ class QuizApiController extends Controller
         }
 
         $perPage = min((int) $request->input('per_page', 20), 100);
-        $quizzes = $query->latest()->paginate($perPage);
+        $quizzes = $query->latest()->paginate($perPage)->withQueryString();
 
         return QuizResource::collection($quizzes);
     }

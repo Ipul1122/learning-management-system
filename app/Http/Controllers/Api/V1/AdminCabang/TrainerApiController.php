@@ -41,7 +41,7 @@ class TrainerApiController extends Controller
         }
 
         $perPage = min((int) $request->input('per_page', 15), 100);
-        $trainers = $query->latest()->paginate($perPage);
+        $trainers = $query->latest()->paginate($perPage)->withQueryString();
 
         return TrainerResource::collection($trainers);
     }

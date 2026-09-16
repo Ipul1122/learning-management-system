@@ -27,7 +27,7 @@ class GraduationReviewApiController extends Controller
             $query->where('status', $request->input('status'));
         }
 
-        $submissions = $query->latest()->paginate(15);
+        $submissions = $query->latest()->paginate(15)->withQueryString();
 
         return response()->json([
             'data' => GraduationSubmissionResource::collection($submissions),

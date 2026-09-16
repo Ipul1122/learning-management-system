@@ -27,7 +27,8 @@ class ClassScheduleController extends Controller
             ->where('trainer_id', $user->id)
             ->withCount(['sessions', 'quizzes'])
             ->latest()
-            ->paginate(10);
+            ->paginate(10)
+            ->withQueryString();
 
         $classes = $trainingClasses;
 

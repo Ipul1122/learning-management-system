@@ -44,7 +44,7 @@ class ClassApiController extends Controller
         }
 
         $perPage = min((int) $request->input('per_page', 15), 100);
-        $classes = $query->latest()->paginate($perPage);
+        $classes = $query->latest()->paginate($perPage)->withQueryString();
 
         return ClassResource::collection($classes);
     }

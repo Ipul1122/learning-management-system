@@ -40,7 +40,7 @@ class AdminCabangApiController extends Controller
         }
 
         $perPage = min((int) $request->input('per_page', 15), 100);
-        $admins = $query->latest()->paginate($perPage);
+        $admins = $query->latest()->paginate($perPage)->withQueryString();
 
         return AdminCabangResource::collection($admins);
     }

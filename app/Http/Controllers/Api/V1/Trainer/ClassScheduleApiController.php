@@ -27,7 +27,8 @@ class ClassScheduleApiController extends Controller
             ->with(['sessions', 'quizzes'])
             ->withCount(['sessions', 'quizzes'])
             ->latest()
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
         return response()->json($classes);
     }

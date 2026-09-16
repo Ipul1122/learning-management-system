@@ -22,7 +22,7 @@ class GraduationApiController extends Controller
 
         $submissions = GraduationSubmission::whereHas('enrollment', function ($q) use ($user) {
             $q->where('user_id', $user->id);
-        })->with(['enrollment.trainingClass.branch', 'trainer'])->latest()->paginate(15);
+        })->with(['enrollment.trainingClass.branch', 'trainer'])->latest()->paginate(15)->withQueryString();
 
         return response()->json([
             'data' => GraduationSubmissionResource::collection($submissions),
