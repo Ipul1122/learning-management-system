@@ -91,6 +91,33 @@ Route::middleware(['auth', 'role:trainer'])
         Route::patch('classes/{class}/sessions/{session}/zoom', [ClassScheduleController::class, 'updateZoom'])->name('classes.sessions.zoom');
     });
 
+use App\Http\Controllers\Peserta\ClassCatalogController;
+use App\Http\Controllers\Peserta\QuizAttemptController;
+use App\Http\Controllers\Peserta\StudyRoomController;
+
+// Peserta Area (Fase 4: PRD 4.1 - 4.6)
+Route::middleware(['auth', 'role:peserta'])
+    ->prefix('peserta')
+    ->name('peserta.')
+    ->group(function () {
+        // Katalog Kelas Pelatihan & Pendaftaran Concurrency
+        Route::get('catalog', [ClassCatalogController::class, 'index'])->name('catalog.index');
+        Route::get('catalog/{class}', [ClassCatalogController::class, 'show'])->name('catalog.show');
+        Route::post('catalog/{class}/enroll', [ClassCatalogController::class, 'enroll'])->name('catalog.enroll');
+
+        // Ruang Belajar, Silabus Sesi & 1-Klik Masuk Zoom
+        Route::get('study', [StudyRoomController::class, 'index'])->name('study.index');
+        Route::get('study/{class}', [StudyRoomController::class, 'show'])->name('study.show');
+        Route::post('study/{class}/sessions/{session}/zoom', [StudyRoomController::class, 'joinZoom'])->name('study.zoom');
+
+        // Paket Kuis Interaktif, Auto-Grading & Pembahasan
+        Route::get('study/{class}/quizzes/{quiz}', [QuizAttemptController::class, 'show'])->name('quizzes.show');
+        Route::post('study/{class}/quizzes/{quiz}/start', [QuizAttemptController::class, 'start'])->name('quizzes.start');
+        Route::get('study/{class}/quizzes/{quiz}/take/{attempt}', [QuizAttemptController::class, 'take'])->name('quizzes.take');
+        Route::post('study/{class}/quizzes/{quiz}/submit/{attempt}', [QuizAttemptController::class, 'submit'])->name('quizzes.submit');
+        Route::get('study/{class}/quizzes/{quiz}/result/{attempt}', [QuizAttemptController::class, 'result'])->name('quizzes.result');
+    });
+
 Route::middleware('auth')->group(function () {
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');

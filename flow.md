@@ -124,26 +124,29 @@ Dokumen ini berfungsi sebagai panduan kerja langkah demi langkah (*step-by-step 
 ### 🔹 FASE 4: Modul Pengguna Peserta (Katalog Kelas, Belajar & Tracking 20 JP)
 > **Tujuan**: Peserta memilih kelas, masuk ruang zoom, belajar dan melacak pemenuhan 20 JP secara transparan.
 
-- [ ] **Step 4.1: Migrasi Pendaftaran & Tracking JP**
-  - [ ] Tabel `class_enrollments` (user_id, class_id, attendance_mode, completed_minutes, completed_jp, status).
-  - [ ] Tabel `learning_progress` (pencatatan menit tiap modul/sesi yang telah diselesaikan).
-- [ ] **Step 4.2: Katalog & Pemilihan Kelas (Fitur PRD 4.2)**
-  - [ ] Halaman katalog kelas dengan filter Cabang, Tipe (Offline/Online/Hybrid), dan Jadwal.
-  - [ ] Indikator sisa kuota realtime:
+- [x] **Step 4.1: Migrasi Pendaftaran & Tracking JP**
+  - [x] Tabel `class_enrollments` (user_id, class_id, attendance_mode, completed_minutes, completed_jp, status).
+  - [x] Tabel `session_attendances` / presensi belajar (pencatatan menit tiap modul/sesi yang telah diselesaikan).
+- [x] **Step 4.2: Katalog & Pemilihan Kelas (Fitur PRD 4.2)**
+  - [x] Halaman katalog kelas dengan filter Cabang, Tipe (Offline/Online/Hybrid), dan Pencarian.
+  - [x] Indikator sisa kuota realtime:
     - Kelas Offline: *"Tersisa X dari 40 Kursi"*. Jika 40 penuh $\rightarrow$ tombol daftar terkunci.
     - Kelas Hybrid: Peserta memilih opsi kehadiran (*"Hadir Fisik di Kelas - Maks 40"* atau *"Hadir Daring Zoom"*).
-  - [ ] **Proteksi Concurrency**: Implementasi `lockForUpdate()` di database saat transaksi pendaftaran agar tidak terjadi *overbooking* kuota offline 40 orang.
-- [ ] **Step 4.3: Masuk ke Zoom (Fitur PRD 4.6)**
-  - [ ] Halaman ruang kelas dengan tombol *"Masuk Zoom Sekarang"*.
-  - [ ] Validasi tombol aktif hanya pada jadwal sesi yang sedang berlangsung.
-  - [ ] Pencatatan log kehadiran peserta saat klik masuk Zoom.
-- [ ] **Step 4.4: Engine Perhitungan & Tracking 20 JP (Fitur PRD 4.1)**
-  - [ ] **Logika Konversi**: `1 JP = 45 Menit` $\rightarrow$ Target Lulus = `20 JP = 900 Menit`.
-  - [ ] Widget Progress Bar visual interaktif (*"15 / 20 JP (75%) Terpenuhi"*).
-  - [ ] Checklist pemenuhan sesi modul materi dan kehadiran tatap muka.
-- [ ] **Step 4.5: Pengerjaan Kuis & Cek Nilai (Fitur PRD 4.5)**
-  - [ ] Antarmuka pengerjaan kuis interaktif dengan timer countdown mundur.
-  - [ ] Tampilan hasil skor kuis dan status lulus kuis berdasarkan *passing grade*.
+  - [x] **Proteksi Concurrency**: Implementasi `lockForUpdate()` di database saat transaksi pendaftaran agar tidak terjadi *overbooking* kuota offline 40 orang.
+- [x] **Step 4.3: Masuk ke Zoom (Fitur PRD 4.6)**
+  - [x] Halaman ruang kelas dengan tombol *"1-Klik Masuk Zoom"*.
+  - [x] Validasi ketersediaan tautan zoom dan pengalihan langsung ke live meeting.
+  - [x] Pencatatan log kehadiran dan audit trail peserta saat klik masuk Zoom.
+- [x] **Step 4.4: Engine Perhitungan & Tracking 20 JP (Fitur PRD 4.1)**
+  - [x] **Logika Konversi**: `1 JP = 45 Menit` $\rightarrow$ Target Lulus = `20 JP = 900 Menit`.
+  - [x] Widget Progress Bar visual interaktif (*"X / 20.0 JP (Y%) Terpenuhi"*).
+  - [x] Status pendaftaran otomatis transisi ke `review_pending` ketika memenuhi 20 JP.
+- [x] **Step 4.5: Pengerjaan Kuis & Cek Nilai (Fitur PRD 4.5)**
+  - [x] Antarmuka pengerjaan kuis interaktif dengan timer countdown mundur Alpine.js.
+  - [x] Auto-grading instan PG & T/F dengan bobot setara, skor proporsional skala 0-100, dan evaluasi passing grade.
+  - [x] Tampilan lembar hasil skor kuis, kunci jawaban, dan pembahasan rujukan materi.
+- [x] **Step 4.6: REST API v1 Sanctum untuk Peserta**
+  - [x] Endpoint lengkap katalog, pendaftaran concurrency, ruang belajar, zoom attendance, dan pengerjaan kuis.
 
 ---
 

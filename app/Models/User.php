@@ -9,6 +9,7 @@ use Illuminate\Database\Eloquent\Attributes\Hidden;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -145,5 +146,31 @@ class User extends Authenticatable
     public function createdQuizzes(): HasMany
     {
         return $this->hasMany(Quiz::class, 'creator_id');
+    }
+
+    /**
+     * Riwayat pendaftaran kelas peserta.
+     */
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(ClassEnrollment::class, 'user_id');
+    }
+
+    /**
+     * Kelas-kelas yang sedang atau pernah diikuti oleh peserta ini.
+     */
+    public function enrolledClasses(): BelongsToMany
+    {
+        return $this->belongsToMany(TrainingClass::class, 'class_enrollments', 'user_id', 'class_id')
+            ->withPivot(['id', 'attendance_mode', 'accumulated_minutes', 'accumulated_jp', 'status', 'enrolled_at'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Seluruh percobaan pengerjaan kuis oleh pengguna ini.
+     */
+    public function quizAttempts(): HasMany
+    {
+        return $this->hasMany(QuizAttempt::class, 'user_id');
     }
 }

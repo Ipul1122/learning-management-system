@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Attributes\Fillable;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Support\Str;
 
@@ -157,5 +158,51 @@ class TrainingClass extends Model
     public function quizzes(): HasMany
     {
         return $this->hasMany(Quiz::class, 'class_id');
+    }
+
+    /**
+     * Data pendaftaran peserta pada kelas ini.
+     */
+    public function enrollments(): HasMany
+    {
+        return $this->hasMany(ClassEnrollment::class, 'class_id');
+    }
+
+    /**
+     * Siswa / Peserta yang terdaftar pada kelas ini.
+     */
+    public function students(): BelongsToMany
+    {
+        return $this->belongsToMany(User::class, 'class_enrollments', 'class_id', 'user_id')
+            ->withPivot(['id', 'attendance_mode', 'accumulated_minutes', 'accumulated_jp', 'status', 'enrolled_at'])
+            ->withTimestamps();
+    }
+
+    /**
+     * Cek apakah kuota fisik offline (maks 40) sudah penuh.
+     */
+    public function isFullOffline(): bool
+    {
+        return $this->enrolled_offline >= $this->offline_capacity;
+    }
+
+    /**
+     * Cek apakah kuota daring online sudah penuh.
+     */
+    public function isFullOnline(): bool
+    {
+        return $this->enrolled_online >= $this->online_capacity;
+    }
+
+    /**
+     * Cek apakah user telah terdaftar di kelas ini.
+     */
+    public function isUserEnrolled(?int $userId): bool
+    {
+        if (! $userId) {
+            return false;
+        }
+
+        return $this->enrollments()->where('user_id', $userId)->exists();
     }
 }

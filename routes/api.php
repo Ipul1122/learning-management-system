@@ -107,3 +107,28 @@ Route::prefix('v1/trainer')
         Route::get('classes/{class}', [ClassScheduleApiController::class, 'show'])->name('classes.show');
         Route::patch('classes/{class}/sessions/{session}/zoom', [ClassScheduleApiController::class, 'updateZoom'])->name('classes.sessions.zoom');
     });
+
+use App\Http\Controllers\Api\V1\Peserta\ClassCatalogApiController;
+use App\Http\Controllers\Api\V1\Peserta\QuizAttemptApiController;
+use App\Http\Controllers\Api\V1\Peserta\StudyRoomApiController;
+
+// V1 Peserta APIs (Fase 4: PRD 4.1 - 4.6)
+Route::prefix('v1/peserta')
+    ->middleware(['auth:sanctum', 'role:peserta'])
+    ->name('api.v1.peserta.')
+    ->group(function () {
+        // Katalog Kelas & Pendaftaran
+        Route::get('catalog', [ClassCatalogApiController::class, 'index'])->name('catalog.index');
+        Route::get('catalog/{class}', [ClassCatalogApiController::class, 'show'])->name('catalog.show');
+        Route::post('catalog/{class}/enroll', [ClassCatalogApiController::class, 'enroll'])->name('catalog.enroll');
+
+        // Ruang Belajar, Tracking JP & 1-Klik Masuk Zoom
+        Route::get('study', [StudyRoomApiController::class, 'index'])->name('study.index');
+        Route::get('study/{class}', [StudyRoomApiController::class, 'show'])->name('study.show');
+        Route::post('study/{class}/sessions/{session}/zoom', [StudyRoomApiController::class, 'joinZoom'])->name('study.zoom');
+
+        // Kuis Interaktif & Auto-Grading
+        Route::get('study/{class}/quizzes/{quiz}', [QuizAttemptApiController::class, 'show'])->name('quizzes.show');
+        Route::post('study/{class}/quizzes/{quiz}/start', [QuizAttemptApiController::class, 'start'])->name('quizzes.start');
+        Route::post('study/{class}/quizzes/{quiz}/attempts/{attempt}/submit', [QuizAttemptApiController::class, 'submit'])->name('quizzes.submit');
+    });
