@@ -101,19 +101,19 @@
                 </span>
             </a>
 
-            <!-- Sertifikat Kelulusan -->
-            <div class="bg-slate-900/40 border border-slate-800/60 rounded-2xl p-5 shadow-sm flex flex-col justify-between opacity-80">
+            <!-- Sertifikat Kelulusan (Fase 5) -->
+            <a href="{{ route('peserta.certificates.index') }}" class="bg-slate-900/60 border border-slate-800 hover:border-purple-500/40 rounded-2xl p-5 shadow-sm flex flex-col justify-between group transition">
                 <div>
                     <div class="w-10 h-10 rounded-xl bg-purple-500/10 text-purple-400 border border-purple-500/20 flex items-center justify-center mb-3">
                         <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
                     </div>
-                    <h4 class="font-montserrat font-bold text-base text-white">E-Sertifikat Kelulusan</h4>
-                    <p class="text-xs text-slate-400 mt-1">Sertifikat otomatis diterbitkan setelah verifikasi trainer selesai (Fase 5).</p>
+                    <h4 class="font-montserrat font-bold text-base text-white group-hover:text-purple-400 transition">E-Sertifikat Kelulusan</h4>
+                    <p class="text-xs text-slate-400 mt-1">Unduh E-Sertifikat resmi ber-QR Code setelah verifikasi 20 JP disetujui Trainer.</p>
                 </div>
-                <span class="inline-block mt-4 text-xs font-semibold text-slate-500 font-montserrat">
-                    Tersedia di Fase 5
+                <span class="inline-block mt-4 text-xs font-bold text-purple-400 font-montserrat flex items-center gap-1">
+                    Buka Sertifikat &rarr;
                 </span>
-            </div>
+            </a>
         </div>
 
         <!-- Sesi Pertemuan Mendatang (Live Zoom) -->

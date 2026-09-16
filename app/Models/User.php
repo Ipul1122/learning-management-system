@@ -173,4 +173,12 @@ class User extends Authenticatable
     {
         return $this->hasMany(QuizAttempt::class, 'user_id');
     }
+
+    /**
+     * Pengajuan kelulusan yang ditinjau oleh Trainer ini.
+     */
+    public function reviewedGraduations(): HasMany
+    {
+        return $this->hasMany(GraduationSubmission::class, 'trainer_id');
+    }
 }
