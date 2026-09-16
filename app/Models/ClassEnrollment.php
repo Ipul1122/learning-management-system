@@ -57,7 +57,7 @@ class ClassEnrollment extends Model
      */
     public function isCompletedJp(): bool
     {
-        return $this->accumulated_jp >= 20.0 || $this->accumulated_minutes >= 900;
+        return $this->accumulated_minutes >= 900;
     }
 
     /**
@@ -98,7 +98,7 @@ class ClassEnrollment extends Model
     public function addMinutes(int $minutes): void
     {
         $this->accumulated_minutes += $minutes;
-        $this->accumulated_jp = round($this->accumulated_minutes / 45, 1);
+        $this->accumulated_jp = floor(($this->accumulated_minutes / 45) * 10) / 10;
 
         if ($this->status === 'enrolled' && $this->accumulated_minutes > 0) {
             $this->status = 'in_progress';
