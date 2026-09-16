@@ -55,4 +55,12 @@ class Branch extends Model
     {
         return $this->hasMany(Question::class);
     }
+
+    /**
+     * Seluruh berita atau pengumuman cabang ini.
+     */
+    public function newsPosts(): HasMany
+    {
+        return $this->hasMany(NewsPost::class);
+    }
 }

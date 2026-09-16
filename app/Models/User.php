@@ -181,4 +181,28 @@ class User extends Authenticatable
     {
         return $this->hasMany(GraduationSubmission::class, 'trainer_id');
     }
+
+    /**
+     * Berita dan artikel yang ditulis oleh pengguna ini.
+     */
+    public function newsPosts(): HasMany
+    {
+        return $this->hasMany(NewsPost::class, 'author_id');
+    }
+
+    /**
+     * Thread forum diskusi yang diinisiasi oleh pengguna ini.
+     */
+    public function forumThreads(): HasMany
+    {
+        return $this->hasMany(ForumThread::class, 'author_id');
+    }
+
+    /**
+     * Balasan forum yang ditulis oleh pengguna ini.
+     */
+    public function forumReplies(): HasMany
+    {
+        return $this->hasMany(ForumReply::class, 'author_id');
+    }
 }

@@ -4,6 +4,8 @@ use App\Http\Controllers\Api\V1\AdminCabang\ActivityLogApiController as CabangAc
 use App\Http\Controllers\Api\V1\AdminCabang\ClassApiController as CabangClassApiController;
 use App\Http\Controllers\Api\V1\AdminCabang\ClassSessionApiController as CabangClassSessionApiController;
 use App\Http\Controllers\Api\V1\AdminCabang\TrainerApiController as CabangTrainerApiController;
+use App\Http\Controllers\Api\V1\ClassForumApiController;
+use App\Http\Controllers\Api\V1\NewsApiController;
 use App\Http\Controllers\Api\V1\Peserta\ClassCatalogApiController;
 use App\Http\Controllers\Api\V1\Peserta\GraduationApiController;
 use App\Http\Controllers\Api\V1\Peserta\QuizAttemptApiController;
@@ -143,4 +145,27 @@ Route::prefix('v1/peserta')
         Route::get('certificates', [GraduationApiController::class, 'index'])->name('certificates.index');
         Route::get('certificates/{submission}', [GraduationApiController::class, 'show'])->name('certificates.show');
         Route::get('certificates/{submission}/download', [GraduationApiController::class, 'download'])->name('certificates.download');
+    });
+
+// V1 Modul Berita & Informasi (Fase 6: PRD 3.4 & 4.3)
+Route::prefix('v1/news')
+    ->name('api.v1.news.')
+    ->group(function () {
+        Route::get('/', [NewsApiController::class, 'index'])->name('index');
+        Route::get('/{slug}', [NewsApiController::class, 'show'])->name('show');
+        Route::post('/', [NewsApiController::class, 'store'])->middleware('auth:sanctum')->name('store');
+    });
+
+// V1 Modul Forum Komunitas Kelas (Fase 6: PRD 3.3 & 4.4)
+Route::prefix('v1/classes/{class}/forum')
+    ->middleware('auth:sanctum')
+    ->name('api.v1.classes.forum.')
+    ->group(function () {
+        Route::get('/', [ClassForumApiController::class, 'index'])->name('index');
+        Route::post('/', [ClassForumApiController::class, 'storeThread'])->name('store');
+        Route::get('/{thread}', [ClassForumApiController::class, 'show'])->name('show');
+        Route::post('/{thread}/reply', [ClassForumApiController::class, 'storeReply'])->name('reply');
+        Route::post('/{thread}/replies', [ClassForumApiController::class, 'storeReply'])->name('replies');
+        Route::patch('/{thread}/pin', [ClassForumApiController::class, 'togglePin'])->name('pin');
+        Route::patch('/{thread}/lock', [ClassForumApiController::class, 'toggleLock'])->name('lock');
     });

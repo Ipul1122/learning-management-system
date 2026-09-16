@@ -173,15 +173,15 @@ Dokumen ini berfungsi sebagai panduan kerja langkah demi langkah (*step-by-step 
 ### 🔹 FASE 6: Modul Pendukung (Forum Komunitas & Berita Informasi)
 > **Tujuan**: Memfasilitasi interaksi sosial, tanya jawab, dan penyebaran pengumuman penting.
 
-- [ ] **Step 6.1: Modul Berita & Informasi (Fitur PRD 3.4 & 4.3)**
-  - [ ] Tabel `news_posts` (title, slug, content, thumbnail, branch_id/global, author_id).
-  - [ ] Form publikasi berita oleh Super Admin / Admin Cabang / Trainer.
-  - [ ] Halaman feed berita & detail pengumuman yang dapat dibaca oleh Peserta.
-- [ ] **Step 6.2: Modul Forum / Komunitas Diskusi (Fitur PRD 3.3 & 4.4)**
-  - [ ] Tabel `forum_threads` dan `forum_replies`.
-  - [ ] Peserta dan Trainer dapat membuat topik diskusi per kelas.
-  - [ ] Balasan berbalas (*nested/threaded reply*) antar peserta dan instruktur.
-  - [ ] Fitur pin diskusi dan moderasi thread oleh Trainer.
+- [x] **Step 6.1: Modul Berita & Informasi (Fitur PRD 3.4 & 4.3)**
+  - [x] Tabel `news_posts` (title, slug, content, thumbnail, branch_id/global, author_id).
+  - [x] Form publikasi berita oleh Super Admin / Admin Cabang / Trainer.
+  - [x] Halaman feed berita & detail pengumuman yang dapat dibaca oleh Peserta.
+- [x] **Step 6.2: Modul Forum / Komunitas Diskusi (Fitur PRD 3.3 & 4.4)**
+  - [x] Tabel `forum_threads` dan `forum_replies`.
+  - [x] Peserta dan Trainer dapat membuat topik diskusi per kelas.
+  - [x] Balasan berbalas (*nested/threaded reply*) antar peserta dan instruktur.
+  - [x] Fitur pin diskusi dan moderasi thread oleh Trainer.
 
 ---
 
