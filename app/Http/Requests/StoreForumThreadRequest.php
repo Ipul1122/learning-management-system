@@ -2,6 +2,4 @@
 
 namespace App\Http\Requests;
 
-class StoreForumThreadRequest extends \App\Http\Requests\Forum\StoreForumThreadRequest
-{
-}
+class StoreForumThreadRequest extends Forum\StoreForumThreadRequest {}

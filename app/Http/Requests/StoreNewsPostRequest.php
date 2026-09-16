@@ -2,6 +2,4 @@
 
 namespace App\Http\Requests;
 
-class StoreNewsPostRequest extends \App\Http\Requests\News\StoreNewsPostRequest
-{
-}
+class StoreNewsPostRequest extends News\StoreNewsPostRequest {}
