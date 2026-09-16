@@ -29,7 +29,8 @@ class GraduationController extends Controller
                 'graduationSubmission.trainer',
             ])
             ->latest()
-            ->paginate(9);
+            ->paginate(9)
+            ->withQueryString();
 
         return view('peserta.certificates.index', compact('enrollments'));
     }

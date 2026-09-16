@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreNewsPostRequest;
+use App\Http\Requests\News\StoreNewsPostRequest;
 use App\Models\ActivityLog;
 use App\Models\Branch;
 use App\Models\NewsPost;

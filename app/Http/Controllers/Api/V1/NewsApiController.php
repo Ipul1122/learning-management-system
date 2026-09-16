@@ -3,7 +3,7 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreNewsPostRequest;
+use App\Http\Requests\News\StoreNewsPostRequest;
 use App\Http\Resources\NewsPostResource;
 use App\Models\NewsPost;
 use Illuminate\Http\JsonResponse;
@@ -35,7 +35,7 @@ class NewsApiController extends Controller
             });
         }
 
-        $news = $query->latest('published_at')->paginate(15);
+        $news = $query->latest('published_at')->paginate(15)->withQueryString();
 
         return response()->json([
             'data' => NewsPostResource::collection($news),

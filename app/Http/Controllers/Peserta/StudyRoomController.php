@@ -24,7 +24,8 @@ class StudyRoomController extends Controller
         $enrollments = ClassEnrollment::where('user_id', $user->id)
             ->with(['trainingClass.branch', 'trainingClass.trainer', 'attendances'])
             ->latest()
-            ->paginate(9);
+            ->paginate(9)
+            ->withQueryString();
 
         $totalMinutesAllClasses = (int) $user->enrollments()->sum('accumulated_minutes');
         $totalJpAllClasses = round($totalMinutesAllClasses / 45, 1);

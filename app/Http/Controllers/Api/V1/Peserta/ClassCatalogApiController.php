@@ -39,7 +39,7 @@ class ClassCatalogApiController extends Controller
         }
 
         $perPage = min((int) $request->input('per_page', 12), 50);
-        $classes = $query->latest()->paginate($perPage);
+        $classes = $query->latest()->paginate($perPage)->withQueryString();
 
         return response()->json($classes);
     }

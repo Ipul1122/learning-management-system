@@ -38,7 +38,7 @@ class QuestionBankApiController extends Controller
         }
 
         $perPage = min((int) $request->input('per_page', 20), 100);
-        $questions = $query->latest()->paginate($perPage);
+        $questions = $query->latest()->paginate($perPage)->withQueryString();
 
         return QuestionResource::collection($questions);
     }

@@ -3,8 +3,8 @@
 namespace App\Http\Controllers\Api\V1;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests\StoreForumReplyRequest;
-use App\Http\Requests\StoreForumThreadRequest;
+use App\Http\Requests\Forum\StoreForumReplyRequest;
+use App\Http\Requests\Forum\StoreForumThreadRequest;
 use App\Http\Resources\ForumReplyResource;
 use App\Http\Resources\ForumThreadResource;
 use App\Models\ForumReply;
@@ -28,7 +28,8 @@ class ClassForumApiController extends Controller
             ->with(['author'])
             ->withCount('replies')
             ->pinnedFirst()
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
         return response()->json([
             'data' => ForumThreadResource::collection($threads),

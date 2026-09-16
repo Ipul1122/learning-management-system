@@ -47,7 +47,7 @@ class ActivityLogApiController extends Controller
         }
 
         $perPage = min((int) $request->input('per_page', 20), 100);
-        $logs = $query->latest()->paginate($perPage);
+        $logs = $query->latest()->paginate($perPage)->withQueryString();
 
         return ActivityLogResource::collection($logs);
     }

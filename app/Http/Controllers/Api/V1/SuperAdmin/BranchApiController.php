@@ -35,7 +35,7 @@ class BranchApiController extends Controller
         }
 
         $perPage = min((int) $request->input('per_page', 15), 100);
-        $branches = $query->latest()->paginate($perPage);
+        $branches = $query->latest()->paginate($perPage)->withQueryString();
 
         return BranchResource::collection($branches);
     }

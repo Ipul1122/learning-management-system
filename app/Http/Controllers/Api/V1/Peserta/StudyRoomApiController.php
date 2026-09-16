@@ -24,7 +24,8 @@ class StudyRoomApiController extends Controller
         $enrollments = ClassEnrollment::where('user_id', $user->id)
             ->with(['trainingClass.branch', 'trainingClass.trainer', 'attendances'])
             ->latest()
-            ->paginate(15);
+            ->paginate(15)
+            ->withQueryString();
 
         return response()->json([
             'enrollments' => EnrollmentResource::collection($enrollments),
