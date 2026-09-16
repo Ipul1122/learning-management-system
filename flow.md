@@ -188,16 +188,23 @@ Dokumen ini berfungsi sebagai panduan kerja langkah demi langkah (*step-by-step 
 ### 🔹 FASE 7: Uji Coba, Optimasi & Penyempurnaan Akhir
 > **Tujuan**: Menjamin stabilitas sistem, bebas bug, aman dari eksploitasi kuota, dan performa optimal.
 
-- [ ] **Step 7.1: Automated Testing dengan Pest**
-  - [ ] Feature test: Pendaftaran kelas offline menolak pendaftar ke-41 (kuota ketat 40).
-  - [ ] Feature test: Perhitungan 20 JP (1 JP = 45 menit) akurat.
-  - [ ] Feature test: Pengujian approval & reject oleh Trainer.
-  - [ ] Feature test: Role-based authorization & branch data isolation.
-- [ ] **Step 7.2: Code Style & Quality**
-  - [ ] Eksekusi `vendor/bin/pint --format agent` untuk menjaga standar kode PSR-12 Laravel.
-- [ ] **Step 7.3: Verifikasi Tampilan & Responsivitas Frontend**
-  - [ ] Pengecekan responsif mobile pada dashboard semua role.
-  - [ ] Build asset produksi via `npm run build`.
+- [x] **Step 7.1: Automated Testing dengan Pest**
+  - [x] Feature test: Pendaftaran kelas offline menolak pendaftar ke-41 (kuota ketat 40).
+  - [x] Feature test: Perhitungan 20 JP (1 JP = 45 menit) akurat.
+  - [x] Feature test: Pengujian approval & reject oleh Trainer.
+  - [x] Feature test: Role-based authorization & branch data isolation.
+- [x] **Step 7.2: Code Style & Quality**
+  - [x] Eksekusi `vendor/bin/pint --format agent` untuk menjaga standar kode PSR-12 Laravel.
+- [x] **Step 7.3: Verifikasi Tampilan & Responsivitas Frontend**
+  - [x] Pengecekan responsif mobile pada dashboard semua role.
+  - [x] Build asset produksi via `npm run build`.
+- [x] **Step 7.4: Modul Autentikasi OTP & Integrasi Google SMTP (Google App Password)**
+  - [x] Tabel & Model `email_otps` (kode 6-digit acak, masa berlaku 10 menit, JSON metadata aman).
+  - [x] Registrasi Peserta dengan OTP: Pendaftaran men-generate OTP dan mengirimkan email via Google SMTP. Akun hanya dibuat & otomatis diverifikasi (`email_verified_at`) setelah validasi kode OTP berhasil.
+  - [x] Lupa Password dengan OTP: Pengiriman kode OTP 6-digit ke email terdaftar, validasi kode saat reset password, update hash Bcrypt, dan auto-invalidation token.
+  - [x] Template HTML Email responsif premium dengan branding LMS Multi-Cabang.
+  - [x] Konfigurasi Google App Password pada `.env.example` dan `config/mail.php`.
+  - [x] Pengujian otomatis komprehensif (`OtpAuthenticationTest.php` - 8 skenario pengujian 100% lulus).
 
 ---
 
@@ -205,3 +212,4 @@ Dokumen ini berfungsi sebagai panduan kerja langkah demi langkah (*step-by-step 
 1. **Pengerjaan Berurutan**: Selesaikan fase per fase. Jangan melompat ke Fase Peserta jika Fase Kelas/Trainer belum selesai.
 2. **Update Checklist**: Setiap kali sebuah sub-task selesai diimplementasikan dan diverifikasi, ubah tanda `[ ]` menjadi `[x]`.
 3. **Commit / Checkpoint Bersih**: Lakukan pengetesan fungsional dan format kode dengan Laravel Pint sebelum melanjutkan ke fase berikutnya.
+

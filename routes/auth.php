@@ -4,30 +4,52 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\ConfirmablePasswordController;
 use App\Http\Controllers\Auth\EmailVerificationNotificationController;
 use App\Http\Controllers\Auth\EmailVerificationPromptController;
+use App\Http\Controllers\Auth\ForgotPasswordOtpController;
 use App\Http\Controllers\Auth\NewPasswordController;
 use App\Http\Controllers\Auth\PasswordController;
-use App\Http\Controllers\Auth\PasswordResetLinkController;
-use App\Http\Controllers\Auth\RegisteredUserController;
+use App\Http\Controllers\Auth\RegisterOtpController;
 use App\Http\Controllers\Auth\VerifyEmailController;
 use Illuminate\Support\Facades\Route;
 
 Route::middleware('guest')->group(function () {
-    Route::get('register', [RegisteredUserController::class, 'create'])
+    // Registrasi Peserta dengan Verifikasi OTP Email (Google App Password)
+    Route::get('register', [RegisterOtpController::class, 'create'])
         ->name('register');
 
-    Route::post('register', [RegisteredUserController::class, 'store']);
+    Route::post('register', [RegisterOtpController::class, 'sendOtp']);
 
+    Route::get('register/verify-otp', [RegisterOtpController::class, 'showVerifyForm'])
+        ->name('register.otp');
+
+    Route::post('register/verify-otp', [RegisterOtpController::class, 'verifyOtp'])
+        ->name('register.otp.verify');
+
+    Route::post('register/resend-otp', [RegisterOtpController::class, 'resendOtp'])
+        ->name('register.otp.resend');
+
+    // Login
     Route::get('login', [AuthenticatedSessionController::class, 'create'])
         ->name('login');
 
     Route::post('login', [AuthenticatedSessionController::class, 'store']);
 
-    Route::get('forgot-password', [PasswordResetLinkController::class, 'create'])
+    // Lupa Password & Reset Menggunakan Kode OTP Email
+    Route::get('forgot-password', [ForgotPasswordOtpController::class, 'create'])
         ->name('password.request');
 
-    Route::post('forgot-password', [PasswordResetLinkController::class, 'store'])
+    Route::post('forgot-password', [ForgotPasswordOtpController::class, 'sendOtp'])
         ->name('password.email');
 
+    Route::get('reset-password-otp', [ForgotPasswordOtpController::class, 'showResetForm'])
+        ->name('password.reset.otp');
+
+    Route::post('reset-password-otp', [ForgotPasswordOtpController::class, 'resetPassword'])
+        ->name('password.reset.otp.update');
+
+    Route::post('forgot-password/resend-otp', [ForgotPasswordOtpController::class, 'resendOtp'])
+        ->name('password.reset.otp.resend');
+
+    // Route legacy Breeze token (kompatibilitas link lama)
     Route::get('reset-password/{token}', [NewPasswordController::class, 'create'])
         ->name('password.reset');
 

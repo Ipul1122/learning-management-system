@@ -14,6 +14,11 @@ class UpdateClassRequest extends FormRequest
      */
     public function authorize(): bool
     {
+        $class = $this->route('class');
+        if ($class && $class->branch_id !== $this->user()?->branch_id) {
+            return false;
+        }
+
         return $this->user()?->hasRole('admin-cabang') && ! empty($this->user()->branch_id);
     }
 
