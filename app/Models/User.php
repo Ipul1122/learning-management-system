@@ -130,4 +130,20 @@ class User extends Authenticatable
     {
         return $query->role('peserta');
     }
+
+    /**
+     * Butir soal yang disusun oleh pengguna ini.
+     */
+    public function createdQuestions(): HasMany
+    {
+        return $this->hasMany(Question::class, 'creator_id');
+    }
+
+    /**
+     * Paket kuis yang dirancang oleh pengguna ini.
+     */
+    public function createdQuizzes(): HasMany
+    {
+        return $this->hasMany(Quiz::class, 'creator_id');
+    }
 }

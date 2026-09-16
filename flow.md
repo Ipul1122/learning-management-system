@@ -104,20 +104,20 @@ Dokumen ini berfungsi sebagai panduan kerja langkah demi langkah (*step-by-step 
 ### 🔹 FASE 3: Modul Pengguna Trainer (Konten Pembelajaran & Evaluasi)
 > **Tujuan**: Trainer menyiapkan materi bank soal, merancang kuis evaluasi, dan mengelola link zoom sesi langsung.
 
-- [ ] **Step 3.1: Migrasi Bank Soal & Kuis**
-  - [ ] Tabel `questions` & `question_options` (pilihan ganda, true/false, esai singkat).
-  - [ ] Tabel `quizzes` (judul kuis, durasi waktu, passing grade, relasi ke kelas).
-  - [ ] Tabel `quiz_attempts` & `quiz_answers` (hasil pengerjaan peserta).
-- [ ] **Step 3.2: CRUD Bank Soal (Fitur PRD 2.2 & 3.1)**
-  - [ ] Manajemen soal oleh Admin Cabang & Trainer.
-  - [ ] *Catatan Aturan Bisnis*: Seluruh soal berbobot setara/sama rata (tanpa pembagian mudah/sedang/sulit).
-  - [ ] Opsi penentuan kunci jawaban dan penjelasan pembahasan.
-- [ ] **Step 3.3: CRUD Kuis (Fitur PRD 2.5 & 3.2)**
-  - [ ] Konfigurasi paket kuis untuk kelas yang diampu.
-  - [ ] Pengaturan waktu pengerjaan (menit), passing grade (misal: min 75), dan pengacakan soal.
-  - [ ] Penilaian kuis manual untuk soal esai (jika ada).
-- [ ] **Step 3.4: Membuat & Memperbarui Link Zoom Sesi Live (Fitur PRD 3.6)**
-  - [ ] Akses cepat Trainer untuk mengubah atau membuat tautan Zoom instan pada sesi kelasnya.
+- [x] **Step 3.1: Migrasi Bank Soal & Kuis**
+  - [x] Tabel `questions` & `question_options` (pilihan ganda, true/false, esai singkat).
+  - [x] Tabel `quizzes` (judul kuis, durasi waktu, passing grade, relasi ke kelas).
+  - [x] Tabel `quiz_attempts` & `quiz_attempt_answers` (hasil pengerjaan peserta).
+- [x] **Step 3.2: CRUD Bank Soal (Fitur PRD 2.2 & 3.1)**
+  - [x] Manajemen soal oleh Admin Cabang & Trainer dengan isolasi multi-cabang.
+  - [x] *Catatan Aturan Bisnis*: Seluruh soal berbobot setara/sama rata (1 poin, tanpa pembagian mudah/sedang/sulit).
+  - [x] Opsi penentuan kunci jawaban dan penjelasan pembahasan.
+- [x] **Step 3.3: CRUD Kuis (Fitur PRD 2.5 & 3.2)**
+  - [x] Konfigurasi paket kuis untuk kelas yang diampu trainer.
+  - [x] Pengaturan waktu pengerjaan (menit), passing grade (default: 75), batas percobaan (max attempts), dan pengacakan soal (is_randomized).
+  - [x] Penilaian kuis manual untuk soal esai (disiapkan pada schema attempts & attempt answers).
+- [x] **Step 3.4: Membuat & Memperbarui Link Zoom Sesi Live (Fitur PRD 3.6)**
+  - [x] Akses cepat Trainer untuk mengubah atau membuat tautan Zoom instan pada sesi kelas yang diampunya.
 
 ---
 

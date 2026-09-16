@@ -47,4 +47,12 @@ class Branch extends Model
     {
         return $this->hasMany(TrainingClass::class);
     }
+
+    /**
+     * Bank soal yang dimiliki cabang ini.
+     */
+    public function questions(): HasMany
+    {
+        return $this->hasMany(Question::class);
+    }
 }
