@@ -1,10 +1,13 @@
 <?php
 
+use App\Http\Controllers\Admin\AdminNewsController;
 use App\Http\Controllers\AdminCabang\ActivityLogController as CabangActivityLogController;
 use App\Http\Controllers\AdminCabang\ClassController as CabangClassController;
 use App\Http\Controllers\AdminCabang\ClassSessionController as CabangClassSessionController;
 use App\Http\Controllers\AdminCabang\TrainerController as CabangTrainerController;
+use App\Http\Controllers\ClassForumController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\NewsController;
 use App\Http\Controllers\Peserta\ClassCatalogController;
 use App\Http\Controllers\Peserta\GraduationController;
 use App\Http\Controllers\Peserta\QuizAttemptController;
@@ -65,11 +68,19 @@ Route::middleware(['auth', 'role:admin-cabang'])
         Route::resource('classes', CabangClassController::class);
 
         // Sesi Pertemuan Kelas
-        Route::resource('classes.sessions', CabangClassSessionController::class)->except(['show']);
+        Route::resource('classes.sessions', CabangClassSessionController::class)->except(['show'])->names('sessions');
 
         // Log Aktivitas Internal Cabang
         Route::get('logs', [CabangActivityLogController::class, 'index'])->name('logs.index');
         Route::get('logs/{log}', [CabangActivityLogController::class, 'show'])->name('logs.show');
+    });
+
+// Manajemen Berita & Pengumuman (Super Admin & Admin Cabang)
+Route::middleware(['auth', 'role:super-admin|admin-cabang'])
+    ->prefix('admin')
+    ->name('admin.')
+    ->group(function () {
+        Route::resource('news', AdminNewsController::class)->except(['show']);
     });
 
 // Trainer / Instruktur Area (PRD 3.1, 3.2, 3.5, 3.6)
@@ -126,6 +137,27 @@ Route::middleware(['auth', 'role:peserta'])
         Route::get('certificates/{submission}/download', [GraduationController::class, 'download'])->name('certificates.download');
         Route::get('certificates/{submission}/preview', [GraduationController::class, 'preview'])->name('certificates.preview');
         Route::post('certificates/{class}/request-review', [GraduationController::class, 'requestReview'])->name('certificates.requestReview');
+    });
+
+// Modul Berita & Informasi Publik (Fase 6: PRD 3.4 & 4.3)
+Route::middleware('auth')->group(function () {
+    Route::get('/news', [NewsController::class, 'index'])->name('news.index');
+    Route::get('/news/{slug}', [NewsController::class, 'show'])->name('news.show');
+});
+
+// Modul Forum Komunitas Diskusi Kelas (Fase 6: PRD 3.3 & 4.4)
+Route::middleware('auth')
+    ->prefix('classes/{class}/forum')
+    ->name('classes.forum.')
+    ->group(function () {
+        Route::get('/', [ClassForumController::class, 'index'])->name('index');
+        Route::get('/create', [ClassForumController::class, 'create'])->name('create');
+        Route::post('/', [ClassForumController::class, 'store'])->name('store');
+        Route::get('/{thread}', [ClassForumController::class, 'show'])->name('show');
+        Route::post('/{thread}/reply', [ClassForumController::class, 'storeReply'])->name('reply');
+        Route::patch('/{thread}/pin', [ClassForumController::class, 'togglePin'])->name('pin');
+        Route::patch('/{thread}/lock', [ClassForumController::class, 'toggleLock'])->name('lock');
+        Route::delete('/{thread}', [ClassForumController::class, 'destroy'])->name('destroy');
     });
 
 // Verifikasi Publik Keaslian E-Sertifikat QR Code (Terbuka Tanpa Otentikasi)

@@ -205,4 +205,12 @@ class TrainingClass extends Model
 
         return $this->enrollments()->where('user_id', $userId)->exists();
     }
+
+    /**
+     * Seluruh thread diskusi forum pada kelas ini.
+     */
+    public function forumThreads(): HasMany
+    {
+        return $this->hasMany(ForumThread::class, 'class_id');
+    }
 }
