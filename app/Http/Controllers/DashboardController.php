@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
 use App\Models\Branch;
+use App\Models\ClassEnrollment;
 use App\Models\ClassSession;
 use App\Models\Question;
 use App\Models\Quiz;
@@ -132,6 +133,31 @@ class DashboardController extends Controller
     {
         $user = $request->user();
 
-        return view('peserta.dashboard', compact('user'));
+        $enrollments = ClassEnrollment::where('user_id', $user->id)
+            ->with(['trainingClass.branch', 'trainingClass.trainer'])
+            ->latest()
+            ->get();
+
+        $totalMinutes = (int) $enrollments->sum('accumulated_minutes');
+        $totalJp = round($totalMinutes / 45, 1);
+        $enrolledClassesCount = $enrollments->count();
+
+        $upcomingSessions = ClassSession::whereIn('class_id', $enrollments->pluck('class_id'))
+            ->where(function ($q) {
+                $q->whereNull('session_date')->orWhere('session_date', '>=', now()->startOfDay());
+            })
+            ->with('trainingClass')
+            ->orderByRaw('session_date IS NULL, session_date ASC')
+            ->take(4)
+            ->get();
+
+        return view('peserta.dashboard', compact(
+            'user',
+            'enrollments',
+            'totalMinutes',
+            'totalJp',
+            'enrolledClassesCount',
+            'upcomingSessions'
+        ));
     }
 }
