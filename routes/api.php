@@ -86,3 +86,24 @@ Route::prefix('v1/admin-cabang')
         Route::get('logs', [CabangActivityLogApiController::class, 'index'])->name('logs.index');
         Route::get('logs/{log}', [CabangActivityLogApiController::class, 'show'])->name('logs.show');
     });
+
+use App\Http\Controllers\Api\V1\Trainer\ClassScheduleApiController;
+use App\Http\Controllers\Api\V1\Trainer\QuestionBankApiController;
+use App\Http\Controllers\Api\V1\Trainer\QuizApiController;
+
+// V1 Trainer APIs
+Route::prefix('v1/trainer')
+    ->middleware(['auth:sanctum', 'role:trainer'])
+    ->name('api.v1.trainer.')
+    ->group(function () {
+        // Bank Soal Setara (PRD 3.1)
+        Route::apiResource('questions', QuestionBankApiController::class);
+
+        // Paket Kuis (PRD 3.2)
+        Route::apiResource('quizzes', QuizApiController::class);
+
+        // Kelas & Zoom Sesi (PRD 3.6)
+        Route::get('classes', [ClassScheduleApiController::class, 'index'])->name('classes.index');
+        Route::get('classes/{class}', [ClassScheduleApiController::class, 'show'])->name('classes.show');
+        Route::patch('classes/{class}/sessions/{session}/zoom', [ClassScheduleApiController::class, 'updateZoom'])->name('classes.sessions.zoom');
+    });

@@ -68,12 +68,27 @@ Route::middleware(['auth', 'role:admin-cabang'])
         Route::get('logs/{log}', [CabangActivityLogController::class, 'show'])->name('logs.show');
     });
 
+use App\Http\Controllers\Trainer\ClassScheduleController;
+use App\Http\Controllers\Trainer\QuestionBankController;
+use App\Http\Controllers\Trainer\QuizController;
+
 // Trainer Area
 Route::middleware(['auth', 'role:trainer'])
     ->prefix('trainer')
     ->name('trainer.')
     ->group(function () {
         Route::get('/dashboard', [DashboardController::class, 'trainerDashboard'])->name('dashboard');
+
+        // Bank Soal Setara (PRD 3.1)
+        Route::resource('questions', QuestionBankController::class)->except(['show']);
+
+        // Kelola Paket Kuis (PRD 3.2)
+        Route::resource('quizzes', QuizController::class);
+
+        // Kelas & Sesi Pembelajaran + Quick Zoom (PRD 3.6)
+        Route::get('classes', [ClassScheduleController::class, 'index'])->name('classes.index');
+        Route::get('classes/{class}', [ClassScheduleController::class, 'show'])->name('classes.show');
+        Route::patch('classes/{class}/sessions/{session}/zoom', [ClassScheduleController::class, 'updateZoom'])->name('classes.sessions.zoom');
     });
 
 Route::middleware('auth')->group(function () {

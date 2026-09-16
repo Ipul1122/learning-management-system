@@ -4,6 +4,9 @@ namespace App\Http\Controllers;
 
 use App\Models\ActivityLog;
 use App\Models\Branch;
+use App\Models\ClassSession;
+use App\Models\Question;
+use App\Models\Quiz;
 use App\Models\TrainingClass;
 use App\Models\User;
 use Illuminate\Http\RedirectResponse;
@@ -85,8 +88,41 @@ class DashboardController extends Controller
     {
         $user = $request->user();
         $branch = $user->branch;
+        $branchId = $branch?->id;
 
-        return view('trainer.dashboard', compact('user', 'branch'));
+        $assignedClassesCount = $branchId ? TrainingClass::where('branch_id', $branchId)->where('trainer_id', $user->id)->count() : 0;
+        $activeClassesCount = $branchId ? TrainingClass::where('branch_id', $branchId)->where('trainer_id', $user->id)->whereIn('status', ['open', 'ongoing'])->count() : 0;
+        $quizzesCount = $branchId ? Quiz::whereHas('class', fn ($q) => $q->where('branch_id', $branchId)->where('trainer_id', $user->id))->count() : 0;
+        $questionsCount = $branchId ? Question::where('branch_id', $branchId)->count() : 0;
+
+        $upcomingSessions = $branchId ? ClassSession::whereHas('trainingClass', function ($q) use ($user, $branchId) {
+            $q->where('branch_id', $branchId)->where('trainer_id', $user->id);
+        })
+            ->where(function ($q) {
+                $q->whereNull('session_date')->orWhere('session_date', '>=', now()->startOfDay());
+            })
+            ->with('trainingClass')
+            ->orderByRaw('session_date IS NULL, session_date ASC')
+            ->take(5)
+            ->get() : collect();
+
+        $recentClasses = $branchId ? TrainingClass::where('branch_id', $branchId)
+            ->where('trainer_id', $user->id)
+            ->withCount(['sessions', 'quizzes'])
+            ->latest()
+            ->take(4)
+            ->get() : collect();
+
+        return view('trainer.dashboard', compact(
+            'user',
+            'branch',
+            'assignedClassesCount',
+            'activeClassesCount',
+            'quizzesCount',
+            'questionsCount',
+            'upcomingSessions',
+            'recentClasses'
+        ));
     }
 
     /**

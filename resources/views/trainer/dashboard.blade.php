@@ -6,90 +6,205 @@
                     <span class="w-2 h-2 rounded-full bg-[#FF6B00]"></span>
                     Instruktur / Trainer
                 </span>
-                <h2 class="font-montserrat font-extrabold text-2xl text-[#1E1B18] leading-tight">
+                <h2 class="font-montserrat font-extrabold text-2xl text-white leading-tight">
                     Dashboard Trainer
                 </h2>
             </div>
-            <div class="text-xs text-[#6E675F]">
-                Cabang: <span class="font-bold text-[#1E1B18]">{{ $branch->name ?? 'Pusat' }}</span>
+            <div class="text-xs text-slate-400">
+                Cabang: <span class="font-bold text-white">{{ $branch->name ?? 'Pusat' }}</span>
             </div>
         </div>
     </x-slot>
 
-    <div class="py-8">
-        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
+    <div class="py-6 space-y-6">
+        <!-- Hero Welcome Banner -->
+        <div class="bg-gradient-to-r from-[#FF6B00] via-[#F97316] to-[#E11D48] rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
+            <div class="relative z-10 max-w-2xl">
+                <span class="text-xs font-bold tracking-widest uppercase text-white/90 font-montserrat">Pusat Pengajaran & Evaluasi</span>
+                <h1 class="text-2xl sm:text-3xl font-montserrat font-extrabold mt-1 mb-2 text-white">
+                    Selamat Datang, {{ $user->name }}
+                </h1>
+                <p class="text-sm text-white/90 leading-relaxed font-quicksand">
+                    Kelola silabus kelas, langsung mulai pertemuan tatap muka daring melalui Zoom, terbitkan bank soal dengan bobot setara, dan pantau kuis evaluasi kelas Anda.
+                </p>
+            </div>
+        </div>
 
-            <!-- Hero Banner -->
-            <div class="bg-gradient-to-r from-[#FF6B00] via-[#F97316] to-[#E11D48] rounded-3xl p-6 sm:p-8 text-white shadow-xl relative overflow-hidden">
-                <div class="relative z-10 max-w-2xl">
-                    <span class="text-xs font-bold tracking-widest uppercase text-white/90 font-montserrat">Pusat Pengajaran & Evaluasi</span>
-                    <h1 class="text-2xl sm:text-3xl font-montserrat font-extrabold mt-1 mb-2 text-white">
-                        Selamat Datang, {{ $user->name }}
-                    </h1>
-                    <p class="text-sm text-white/90 leading-relaxed font-quicksand">
-                        Bimbing peserta dalam pemenuhan 20 Jam Pelajaran (900 menit), selenggarakan live session Zoom, evaluasi kuis, diskusikan materi di forum, dan verifikasi kelulusan peserta.
-                    </p>
+        <!-- Metric Stat Cards -->
+        <div class="grid grid-cols-2 lg:grid-cols-4 gap-4">
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 flex items-center gap-4 shadow-sm">
+                <div class="w-12 h-12 rounded-xl bg-orange-500/10 border border-orange-500/20 flex items-center justify-center text-orange-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253" />
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-xs font-medium text-slate-400 block">Kelas Diampu</span>
+                    <h3 class="text-2xl font-extrabold text-white">{{ number_format($assignedClassesCount) }}</h3>
+                    <span class="text-[10px] text-emerald-400 font-semibold">{{ $activeClassesCount }} kelas aktif</span>
                 </div>
             </div>
 
-            <!-- Fitur Utama Trainer Sesuai PRD 3.1 - 3.6 -->
-            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
-                <div class="bg-white rounded-2xl p-5 border border-[#EBE5DF] shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="w-10 h-10 rounded-xl bg-[#FEF2F2] text-[#DC2626] flex items-center justify-center mb-3">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"/></svg>
-                        </div>
-                        <h4 class="font-montserrat font-bold text-base text-[#1E1B18]">3.5 Verifikasi Kelulusan 20 JP</h4>
-                        <p class="text-xs text-[#6E675F] mt-1">Terima (*Approve*) atau tolak (*Reject*) pengajuan kelulusan peserta dengan catatan perbaikan.</p>
-                    </div>
-                    <span class="inline-block mt-4 text-xs font-bold text-[#DC2626] font-montserrat">Fase 5 • Verifikasi &rarr;</span>
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 flex items-center gap-4 shadow-sm">
+                <div class="w-12 h-12 rounded-xl bg-sky-500/10 border border-sky-500/20 flex items-center justify-center text-sky-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                    </svg>
                 </div>
-
-                <div class="bg-white rounded-2xl p-5 border border-[#EBE5DF] shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="w-10 h-10 rounded-xl bg-[#FFF7ED] text-[#FF6B00] flex items-center justify-center mb-3">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z"/></svg>
-                        </div>
-                        <h4 class="font-montserrat font-bold text-base text-[#1E1B18]">3.6 Buat Link Zoom</h4>
-                        <p class="text-xs text-[#6E675F] mt-1">Buat dan perbarui tautan pertemuan live Zoom untuk sesi tatap muka daring.</p>
-                    </div>
-                    <span class="inline-block mt-4 text-xs font-bold text-[#FF6B00] font-montserrat">Fase 3 • Integrasi Zoom &rarr;</span>
-                </div>
-
-                <div class="bg-white rounded-2xl p-5 border border-[#EBE5DF] shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="w-10 h-10 rounded-xl bg-[#FFF7ED] text-[#EA580C] flex items-center justify-center mb-3">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01"/></svg>
-                        </div>
-                        <h4 class="font-montserrat font-bold text-base text-[#1E1B18]">3.1 & 3.2 Bank Soal & Kuis</h4>
-                        <p class="text-xs text-[#6E675F] mt-1">Susun bank soal setara (tanpa tingkat kesulitan) dan terbitkan kuis evaluasi kelas.</p>
-                    </div>
-                    <span class="inline-block mt-4 text-xs font-bold text-[#EA580C] font-montserrat">Fase 3 • Kuis &rarr;</span>
-                </div>
-
-                <div class="bg-white rounded-2xl p-5 border border-[#EBE5DF] shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="w-10 h-10 rounded-xl bg-[#FAF8F5] text-[#1E1B18] flex items-center justify-center mb-3">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"/></svg>
-                        </div>
-                        <h4 class="font-montserrat font-bold text-base text-[#1E1B18]">3.3 Forum & Komunitas</h4>
-                        <p class="text-xs text-[#6E675F] mt-1">Interaksi tanya jawab materi, sematkan pengumuman, dan moderasi thread peserta.</p>
-                    </div>
-                    <span class="inline-block mt-4 text-xs font-bold text-[#6E675F] font-montserrat">Fase 6 • Forum &rarr;</span>
-                </div>
-
-                <div class="bg-white rounded-2xl p-5 border border-[#EBE5DF] shadow-sm flex flex-col justify-between">
-                    <div>
-                        <div class="w-10 h-10 rounded-xl bg-[#FAF8F5] text-[#1E1B18] flex items-center justify-center mb-3">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/></svg>
-                        </div>
-                        <h4 class="font-montserrat font-bold text-base text-[#1E1B18]">3.4 Berita & Informasi</h4>
-                        <p class="text-xs text-[#6E675F] mt-1">Publikasi pengumuman penting bagi peserta kelas.</p>
-                    </div>
-                    <span class="inline-block mt-4 text-xs font-bold text-[#6E675F] font-montserrat">Fase 6 • Berita &rarr;</span>
+                <div>
+                    <span class="text-xs font-medium text-slate-400 block">Bank Soal Cabang</span>
+                    <h3 class="text-2xl font-extrabold text-white">{{ number_format($questionsCount) }}</h3>
+                    <span class="text-[10px] text-sky-400 font-semibold">Bobot Setara (1 poin)</span>
                 </div>
             </div>
 
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 flex items-center gap-4 shadow-sm">
+                <div class="w-12 h-12 rounded-xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center text-amber-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-xs font-medium text-slate-400 block">Paket Kuis Saya</span>
+                    <h3 class="text-2xl font-extrabold text-white">{{ number_format($quizzesCount) }}</h3>
+                    <span class="text-[10px] text-amber-400 font-semibold">Terkait Kelas</span>
+                </div>
+            </div>
+
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 flex items-center gap-4 shadow-sm">
+                <div class="w-12 h-12 rounded-xl bg-purple-500/10 border border-purple-500/20 flex items-center justify-center text-purple-400">
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                    </svg>
+                </div>
+                <div>
+                    <span class="text-xs font-medium text-slate-400 block">Live Sesi Zoom</span>
+                    <h3 class="text-2xl font-extrabold text-white">{{ $upcomingSessions->count() }}</h3>
+                    <span class="text-[10px] text-purple-400 font-semibold">Sesi Siap/Akan Datang</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- Upcoming Teaching Sessions & Instant Zoom Access (PRD 3.6) -->
+        <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-6">
+            <div class="flex items-center justify-between pb-4 border-b border-slate-800/80 mb-4">
+                <div>
+                    <h2 class="text-base font-bold text-white flex items-center gap-2">
+                        <span class="w-2.5 h-2.5 rounded-full bg-sky-400 animate-ping"></span>
+                        Jadwal Pengajaran & Akses Cepat Zoom
+                    </h2>
+                    <p class="text-xs text-slate-400 mt-0.5">Sesi pertemuan aktif pada kelas yang Anda bimbing.</p>
+                </div>
+                <a href="{{ route('trainer.classes.index') }}" class="text-xs font-semibold text-sky-400 hover:text-sky-300">
+                    Lihat Semua Kelas &rarr;
+                </a>
+            </div>
+
+            @if($upcomingSessions->isEmpty())
+                <div class="py-6 text-center text-slate-500 text-xs">
+                    Tidak ada jadwal sesi pengajaran aktif hari ini atau yang akan datang.
+                </div>
+            @else
+                <div class="space-y-3">
+                    @foreach($upcomingSessions as $sess)
+                        <div class="bg-slate-950/40 border border-slate-800/60 hover:border-slate-700 rounded-xl p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-3 transition">
+                            <div>
+                                <div class="flex items-center gap-2 mb-1">
+                                    <span class="px-2 py-0.5 text-[10px] font-bold rounded-md uppercase tracking-wider
+                                        {{ $sess->trainingClass->type === 'online' ? 'bg-sky-500/10 text-sky-400' : 'bg-purple-500/10 text-purple-400' }}">
+                                        {{ $sess->trainingClass->title }}
+                                    </span>
+                                    <span class="text-xs text-slate-400">
+                                        {{ $sess->session_date ? $sess->session_date->translatedFormat('d M Y, H:i') . ' WIB' : 'Jadwal Fleksibel' }}
+                                    </span>
+                                </div>
+                                <h3 class="text-sm font-bold text-white">
+                                    Sesi #{{ $sess->session_order }}: {{ $sess->title }} ({{ $sess->jp_duration }} JP)
+                                </h3>
+                            </div>
+
+                            <div class="flex items-center gap-2 shrink-0">
+                                @if($sess->zoom_url)
+                                    <a href="{{ $sess->zoom_url }}" target="_blank"
+                                       class="px-3.5 py-1.5 text-xs font-bold text-white bg-sky-600 hover:bg-sky-500 rounded-xl shadow-sm shadow-sky-600/30 transition flex items-center gap-1.5">
+                                        <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 10l4.553-2.276A1 1 0 0121 8.618v6.764a1 1 0 01-1.447.894L15 14M5 18h8a2 2 0 002-2V8a2 2 0 00-2-2H5a2 2 0 00-2 2v8a2 2 0 002 2z" />
+                                        </svg>
+                                        Buka Zoom
+                                    </a>
+                                @endif
+                                <a href="{{ route('trainer.classes.show', $sess->trainingClass) }}"
+                                   class="px-3 py-1.5 text-xs font-semibold text-slate-300 bg-slate-800 hover:bg-slate-700 rounded-xl border border-slate-700 transition">
+                                    {{ $sess->zoom_url ? 'Detail Sesi' : 'Set Link Zoom' }}
+                                </a>
+                            </div>
+                        </div>
+                    @endforeach
+                </div>
+            @endif
+        </div>
+
+        <!-- Quick Access Module Cards (PRD 3.1 & 3.2) -->
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+            <!-- Bank Soal Card -->
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-700 transition group">
+                <div>
+                    <div class="w-10 h-10 rounded-xl bg-orange-500/10 text-orange-400 border border-orange-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-base font-bold text-white group-hover:text-orange-400 transition">3.1 Bank Soal Setara</h3>
+                    <p class="text-xs text-slate-400 mt-1">Kelola butir soal tipe pilihan ganda, benar/salah, dan esai dengan bobot setara (1 poin) untuk cabang Anda.</p>
+                </div>
+                <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between">
+                    <a href="{{ route('trainer.questions.index') }}" class="text-xs font-bold text-orange-400 hover:text-orange-300">
+                        Buka Bank Soal &rarr;
+                    </a>
+                    <a href="{{ route('trainer.questions.create') }}" class="px-2.5 py-1 text-[11px] font-semibold text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition">
+                        + Buat Soal
+                    </a>
+                </div>
+            </div>
+
+            <!-- Paket Kuis Card -->
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-700 transition group">
+                <div>
+                    <div class="w-10 h-10 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 5H7a2 2 0 00-2 2v12a2 2 0 002 2h10a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-3 7h3m-3 4h3m-6-4h.01M9 16h.01" />
+                        </svg>
+                    </div>
+                    <h3 class="text-base font-bold text-white group-hover:text-amber-400 transition">3.2 Paket Kuis Evaluasi</h3>
+                    <p class="text-xs text-slate-400 mt-1">Rancang kuis per kelas, atur passing grade (default 75%), batas waktu pengerjaan, dan pengacakan soal.</p>
+                </div>
+                <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between">
+                    <a href="{{ route('trainer.quizzes.index') }}" class="text-xs font-bold text-amber-400 hover:text-amber-300">
+                        Kelola Kuis &rarr;
+                    </a>
+                    <a href="{{ route('trainer.quizzes.create') }}" class="px-2.5 py-1 text-[11px] font-semibold text-white bg-slate-800 hover:bg-slate-700 rounded-lg transition">
+                        + Buat Kuis
+                    </a>
+                </div>
+            </div>
+
+            <!-- Kelas & Silabus Card -->
+            <div class="bg-slate-900/60 border border-slate-800/80 rounded-2xl p-5 flex flex-col justify-between hover:border-slate-700 transition group">
+                <div>
+                    <div class="w-10 h-10 rounded-xl bg-sky-500/10 text-sky-400 border border-sky-500/20 flex items-center justify-center mb-3">
+                        <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10" />
+                        </svg>
+                    </div>
+                    <h3 class="text-base font-bold text-white group-hover:text-sky-400 transition">3.6 Kelas & Zoom Pertemuan</h3>
+                    <p class="text-xs text-slate-400 mt-1">Pantau silabus 20 JP per kelas, perbarui URL meeting, ID dan passcode Zoom untuk peserta daring.</p>
+                </div>
+                <div class="pt-4 mt-4 border-t border-slate-800/80 flex items-center justify-between">
+                    <a href="{{ route('trainer.classes.index') }}" class="text-xs font-bold text-sky-400 hover:text-sky-300">
+                        Daftar Kelas &rarr;
+                    </a>
+                </div>
+            </div>
         </div>
     </div>
 </x-app-layout>

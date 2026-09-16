@@ -150,4 +150,12 @@ class TrainingClass extends Model
 
         return $slug;
     }
+
+    /**
+     * Paket kuis pada kelas ini.
+     */
+    public function quizzes(): HasMany
+    {
+        return $this->hasMany(Quiz::class, 'class_id');
+    }
 }

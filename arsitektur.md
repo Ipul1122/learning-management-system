@@ -103,8 +103,9 @@ app/Http/
 │           │   ├── ClassApiController.php
 │           │   └── ScheduleApiController.php
 │           ├── Trainer/
-│           │   ├── QuestionApiController.php
-│           │   ├── QuizApiController.php
+│           │   ├── QuestionBankApiController.php   # API Bank Soal
+│           │   ├── QuizApiController.php           # API Paket Kuis
+│           │   ├── ClassScheduleApiController.php  # API Kelas & Update Zoom Sesi
 │           │   └── GraduationReviewApiController.php
 │           └── Peserta/
 │               ├── ClassCatalogApiController.php
@@ -119,6 +120,11 @@ app/Http/
 │   │   └── UpdateAdminCabangRequest.php
 │   ├── AdminCabang/
 │   ├── Trainer/
+│   │   ├── StoreQuestionRequest.php
+│   │   ├── UpdateQuestionRequest.php
+│   │   ├── StoreQuizRequest.php
+│   │   ├── UpdateQuizRequest.php
+│   │   └── UpdateZoomSessionRequest.php
 │   └── Peserta/
 │
 └── Resources/                              # Eloquent API Resources (JSON Transformers)
@@ -128,6 +134,8 @@ app/Http/
     │   └── ActivityLogResource.php
     ├── AdminCabang/
     ├── Trainer/
+    │   ├── QuestionResource.php
+    │   └── QuizResource.php
     └── Peserta/
 ```
 
@@ -166,9 +174,29 @@ Folder views dipetakan sesuai pembagian peran pengguna dengan konsistensi penama
 ```text
 resources/views/
 ├── layouts/
-│   ├── app.blade.php           # Layout Utama (Google Fonts, Tailwind, SweetAlert2)
-│   ├── navigation.blade.php    # Navigasi Atas Dinamis dengan Badge Peran
-│   └── guest.blade.php         # Layout Login/Register
+│   ├── app.blade.php           # Layout Utama (delegasi otomatis ke sidebar & navbar peran pengguna)
+│   ├── navigation.blade.php    # Navigasi Topbar Standar (Guest/Fallback)
+│   ├── guest.blade.php         # Layout Login/Register
+│   │
+│   ├── superAdmin/             # [Layout Khusus Super Admin]
+│   │   ├── app.blade.php       # Master Layout Super Admin (<x-super-admin-layout>)
+│   │   ├── sidebar.blade.php   # Sidebar Desktop & Mobile Drawer Super Admin
+│   │   └── navbar.blade.php    # Top Navbar & Breadcrumb Super Admin
+│   │
+│   ├── admin/                  # [Layout Khusus Admin Cabang]
+│   │   ├── app.blade.php       # Master Layout Admin Cabang (<x-admin-layout>)
+│   │   ├── sidebar.blade.php   # Sidebar Desktop & Mobile Drawer Admin Cabang
+│   │   └── navbar.blade.php    # Top Navbar & Branch Badge Admin Cabang
+│   │
+│   ├── trainer/                # [Layout Khusus Trainer]
+│   │   ├── app.blade.php       # Master Layout Trainer (<x-trainer-layout>)
+│   │   ├── sidebar.blade.php   # Sidebar Trainer
+│   │   └── navbar.blade.php    # Navbar Trainer
+│   │
+│   └── peserta/                # [Layout Khusus Peserta]
+│       ├── app.blade.php       # Master Layout Peserta (<x-peserta-layout>)
+│       ├── sidebar.blade.php   # Sidebar Ruang Belajar Peserta
+│       └── navbar.blade.php    # Navbar Peserta
 ├── components/                 # Blade UI Components (Modal, Button, Input, Card)
 │
 ├── super-admin/                # Views Peran Super Admin
