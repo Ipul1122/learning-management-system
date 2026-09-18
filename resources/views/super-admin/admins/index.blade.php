@@ -13,12 +13,12 @@
                     </p>
                 </div>
                 <div>
-                    <a href="{{ route('admin.admins.create') }}"
+                    <a href="{{ route('admin.branches.create') }}"
                        class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-montserrat font-bold text-sm text-white bg-gradient-to-r from-[#FF6B00] to-[#E11D48] hover:from-[#EA580C] hover:to-[#DC2626] shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5">
                         <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
                         </svg>
-                        <span>Tambah Admin Cabang</span>
+                        <span>Tambah Cabang & Admin</span>
                     </a>
                 </div>
             </div>
@@ -167,11 +167,11 @@
                                         <td class="py-4 px-6 text-center">
                                             @if($admin->status === 'active')
                                                 <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold font-montserrat bg-[#ECFDF5] text-[#10B981] border border-[#A7F3D0]">
-                                                    ● Aktif
+                                                    Aktif
                                                 </span>
                                             @else
                                                 <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold font-montserrat bg-[#FEF2F2] text-[#DC2626] border border-[#FECACA]">
-                                                    ○ Nonaktif
+                                                    Nonaktif
                                                 </span>
                                             @endif
                                         </td>

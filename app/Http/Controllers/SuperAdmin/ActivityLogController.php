@@ -82,7 +82,9 @@ class ActivityLogController extends Controller
             'user_name' => $log->user?->name ?? 'System',
             'user_role' => $log->user?->roles->first()?->name ?? 'None',
             'branch_name' => $log->branch?->name ?? 'Global / Pusat',
-            'formatted_time' => $log->created_at?->format('d M Y H:i:s'),
+            'target_entity_label' => $log->target_entity_label,
+            'formatted_time' => $log->formatted_created_at,
+            'formatted_ip' => $log->formatted_ip_address,
         ]);
     }
 }

@@ -57,12 +57,13 @@ class AdminCabangController extends Controller
 
     /**
      * Tampilkan formulir pembuatan akun Admin Cabang baru.
+     * Dialihkan ke pembuatan cabang terintegrasi untuk UX yang lebih nyaman.
      */
-    public function create(): View
+    public function create(): RedirectResponse
     {
-        $branches = Branch::where('is_active', true)->orderBy('name')->get();
-
-        return view('super-admin.admins.create', compact('branches'));
+        return redirect()
+            ->route('admin.branches.create')
+            ->with('info', 'Pendaftaran Admin Cabang kini terintegrasi langsung pada menu Tambah Cabang Baru.');
     }
 
     /**

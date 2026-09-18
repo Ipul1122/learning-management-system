@@ -7,8 +7,11 @@ use App\Http\Requests\SuperAdmin\StoreBranchRequest;
 use App\Http\Requests\SuperAdmin\UpdateBranchRequest;
 use App\Models\ActivityLog;
 use App\Models\Branch;
+use App\Models\User;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\View\View;
 
 class BranchController extends Controller
@@ -53,28 +56,133 @@ class BranchController extends Controller
      */
     public function create(): View
     {
-        return view('super-admin.branches.create');
+        $existingBranches = Branch::with(['users' => function ($q) {
+            $q->role('admin-cabang')->select('id', 'name', 'email', 'branch_id');
+        }])->select('id', 'name', 'code', 'city', 'phone', 'address', 'is_active')
+        ->orderBy('name')
+        ->get()
+        ->map(function ($b) {
+            return [
+                'id' => $b->id,
+                'name' => $b->name,
+                'code' => $b->code,
+                'city' => $b->city,
+                'phone' => $b->phone,
+                'address' => $b->address,
+                'is_active' => (bool) $b->is_active,
+                'admin_count' => $b->users->count(),
+                'admin_names' => $b->users->pluck('name')->implode(', '),
+            ];
+        });
+
+        return view('super-admin.branches.create', compact('existingBranches'));
     }
 
     /**
      * Simpan cabang baru ke database dan catat audit log.
+     * Sekaligus membuat akun Admin Cabang jika diisi, atau menambah admin pada cabang yang sudah ada.
      */
     public function store(StoreBranchRequest $request): RedirectResponse
     {
-        $branch = Branch::create($request->validated());
+        $validated = $request->validated();
 
-        ActivityLog::record(
-            action: 'CREATE',
-            description: "Membuat cabang baru: {$branch->name} ({$branch->code})",
-            target: $branch,
-            old: null,
-            new: $branch->toArray(),
-            branchId: $branch->id
-        );
+        $result = DB::transaction(function () use ($validated, $request) {
+            // Skenario A: Menggunakan cabang yang sudah ada untuk menambah admin baru
+            if ($request->filled('existing_branch_id')) {
+                $branch = Branch::findOrFail($request->input('existing_branch_id'));
+
+                $admin = User::create([
+                    'name' => $validated['admin_name'],
+                    'email' => $validated['admin_email'],
+                    'password' => Hash::make($validated['admin_password']),
+                    'phone_number' => $validated['admin_phone_number'] ?? null,
+                    'status' => $validated['admin_status'] ?? 'active',
+                    'branch_id' => $branch->id,
+                ]);
+
+                $admin->assignRole('admin-cabang');
+
+                ActivityLog::record(
+                    action: 'CREATE',
+                    description: "Menambahkan akun Admin Cabang: {$admin->name} ({$admin->email}) untuk cabang terdaftar {$branch->name} ({$branch->code})",
+                    target: $admin,
+                    old: null,
+                    new: $admin->only(['id', 'name', 'email', 'branch_id', 'status']),
+                    branchId: $branch->id
+                );
+
+                return [$branch, $admin, true];
+            }
+
+            // Skenario B: Membuat kantor cabang baru
+            $branch = Branch::create([
+                'name' => $validated['name'],
+                'code' => $validated['code'],
+                'address' => $validated['address'],
+                'city' => $validated['city'],
+                'phone' => $validated['phone'] ?? null,
+                'is_active' => $validated['is_active'] ?? true,
+            ]);
+
+            ActivityLog::record(
+                action: 'CREATE',
+                description: "Membuat cabang baru: {$branch->name} ({$branch->code})",
+                target: $branch,
+                old: null,
+                new: $branch->toArray(),
+                branchId: $branch->id
+            );
+
+            // Buat Akun Admin Cabang jika diisi
+            $admin = null;
+            $hasAdmin = $request->boolean('create_admin_account') || ! empty($validated['admin_name']);
+            if ($hasAdmin && ! empty($validated['admin_email'])) {
+                $admin = User::create([
+                    'name' => $validated['admin_name'],
+                    'email' => $validated['admin_email'],
+                    'password' => Hash::make($validated['admin_password']),
+                    'phone_number' => $validated['admin_phone_number'] ?? null,
+                    'status' => $validated['admin_status'] ?? 'active',
+                    'branch_id' => $branch->id,
+                ]);
+
+                $admin->assignRole('admin-cabang');
+
+                ActivityLog::record(
+                    action: 'CREATE',
+                    description: "Membuat akun Admin Cabang: {$admin->name} ({$admin->email}) untuk {$branch->name}",
+                    target: $admin,
+                    old: null,
+                    new: $admin->only(['id', 'name', 'email', 'branch_id', 'status']),
+                    branchId: $branch->id
+                );
+            }
+
+            return [$branch, $admin, false];
+        });
+
+        [$branch, $admin, $isReused] = $result;
+
+        if ($request->input('action') === 'save_and_add_another') {
+            $addMsg = $admin
+                ? "Admin {$admin->name} ({$admin->email}) berhasil ditambahkan ke {$branch->name}!"
+                : "Cabang {$branch->name} berhasil disimpan!";
+            return redirect()
+                ->route('admin.branches.create', ['branch_id' => $branch->id])
+                ->with('success', "{$addMsg} Silakan isi formulir untuk mendaftarkan akun admin berikutnya.");
+        }
+
+        if ($isReused) {
+            $message = "Berhasil menambahkan akun Admin Cabang {$admin->name} ({$admin->email}) untuk kantor cabang {$branch->name}!";
+        } else {
+            $message = $admin
+                ? "Kantor Cabang {$branch->name} dan akun Admin Cabang {$admin->name} ({$admin->email}) berhasil didaftarkan!"
+                : "Cabang {$branch->name} berhasil ditambahkan!";
+        }
 
         return redirect()
             ->route('admin.branches.index')
-            ->with('success', "Cabang {$branch->name} berhasil ditambahkan!");
+            ->with('success', $message);
     }
 
     /**
@@ -82,30 +190,109 @@ class BranchController extends Controller
      */
     public function edit(Branch $branch): View
     {
-        return view('super-admin.branches.edit', compact('branch'));
+        $existingBranches = Branch::where('id', '!=', $branch->id)->select('id', 'name', 'code')->get();
+        $admin = $branch->users()->role('admin-cabang')->first();
+
+        return view('super-admin.branches.edit', compact('branch', 'existingBranches', 'admin'));
     }
 
     /**
      * Perbarui data cabang dan catat audit log.
+     * Sekaligus memperbarui atau mendaftarkan akun Admin Cabang.
      */
     public function update(UpdateBranchRequest $request, Branch $branch): RedirectResponse
     {
-        $oldData = $branch->toArray();
-        $branch->update($request->validated());
-        $newData = $branch->fresh()->toArray();
+        $validated = $request->validated();
 
-        ActivityLog::record(
-            action: 'UPDATE',
-            description: "Memperbarui informasi cabang: {$branch->name} ({$branch->code})",
-            target: $branch,
-            old: $oldData,
-            new: $newData,
-            branchId: $branch->id
-        );
+        $result = DB::transaction(function () use ($validated, $request, $branch) {
+            $oldData = $branch->toArray();
+            $branch->update([
+                'name' => $validated['name'],
+                'code' => $validated['code'],
+                'address' => $validated['address'],
+                'city' => $validated['city'],
+                'phone' => $validated['phone'] ?? null,
+                'is_active' => $validated['is_active'] ?? true,
+            ]);
+            $newData = $branch->fresh()->toArray();
+
+            ActivityLog::record(
+                action: 'UPDATE',
+                description: "Memperbarui informasi cabang: {$branch->name} ({$branch->code})",
+                target: $branch,
+                old: $oldData,
+                new: $newData,
+                branchId: $branch->id
+            );
+
+            // Periksa akun admin cabang
+            $admin = $branch->users()->role('admin-cabang')->first();
+            $adminMessage = '';
+
+            if ($admin) {
+                // Perbarui akun admin yang ada jika data admin terisi
+                if (! empty($validated['admin_name']) && ! empty($validated['admin_email'])) {
+                    $adminOld = $admin->only(['name', 'email', 'phone_number', 'status']);
+                    $adminData = [
+                        'name' => $validated['admin_name'],
+                        'email' => $validated['admin_email'],
+                        'phone_number' => $validated['admin_phone_number'] ?? null,
+                        'status' => $validated['admin_status'] ?? $admin->status,
+                    ];
+
+                    if (! empty($validated['admin_password'])) {
+                        $adminData['password'] = Hash::make($validated['admin_password']);
+                    }
+
+                    $admin->update($adminData);
+
+                    ActivityLog::record(
+                        action: 'UPDATE',
+                        description: "Memperbarui akun Admin Cabang: {$admin->name} ({$admin->email}) untuk {$branch->name}",
+                        target: $admin,
+                        old: $adminOld,
+                        new: $admin->only(['name', 'email', 'phone_number', 'status']),
+                        branchId: $branch->id
+                    );
+
+                    $adminMessage = " dan akun Admin Cabang {$admin->name}";
+                }
+            } else {
+                // Jika belum ada admin dan memilih untuk membuat akun admin baru
+                $hasAdmin = $request->boolean('create_admin_account') || ! empty($validated['admin_name']);
+                if ($hasAdmin && ! empty($validated['admin_email']) && ! empty($validated['admin_password'])) {
+                    $newAdmin = User::create([
+                        'name' => $validated['admin_name'],
+                        'email' => $validated['admin_email'],
+                        'password' => Hash::make($validated['admin_password']),
+                        'phone_number' => $validated['admin_phone_number'] ?? null,
+                        'status' => $validated['admin_status'] ?? 'active',
+                        'branch_id' => $branch->id,
+                    ]);
+
+                    $newAdmin->assignRole('admin-cabang');
+
+                    ActivityLog::record(
+                        action: 'CREATE',
+                        description: "Membuat akun Admin Cabang baru: {$newAdmin->name} ({$newAdmin->email}) untuk {$branch->name}",
+                        target: $newAdmin,
+                        old: null,
+                        new: $newAdmin->only(['id', 'name', 'email', 'branch_id', 'status']),
+                        branchId: $branch->id
+                    );
+
+                    $adminMessage = " dan mendaftarkan Admin Cabang {$newAdmin->name}";
+                }
+            }
+
+            return [$branch, $adminMessage];
+        });
+
+        [$branch, $adminMessage] = $result;
 
         return redirect()
             ->route('admin.branches.index')
-            ->with('success', "Data cabang {$branch->name} berhasil diperbarui!");
+            ->with('success', "Data cabang {$branch->name}{$adminMessage} berhasil diperbarui!");
     }
 
     /**

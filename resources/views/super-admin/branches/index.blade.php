@@ -185,6 +185,15 @@
                                                     </button>
                                                 </form>
 
+                                                <!-- Tambah Admin Baru ke Cabang Ini -->
+                                                <a href="{{ route('admin.branches.create', ['branch_id' => $branch->id]) }}"
+                                                   title="Tambah Admin untuk Cabang Ini"
+                                                   class="p-2 rounded-lg text-[#6E675F] hover:text-[#10B981] hover:bg-[#ECFDF5] transition">
+                                                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z" />
+                                                    </svg>
+                                                </a>
+
                                                 <!-- Edit -->
                                                 <a href="{{ route('admin.branches.edit', $branch) }}"
                                                    title="Edit Cabang"
@@ -242,13 +251,17 @@
                                         <span class="font-bold text-[#FF6B00]">{{ $branch->users_count }} Pengguna</span>
                                         <span>•</span>
                                         @if($branch->is_active)
-                                            <span class="text-emerald-600 font-bold">Aktif</span>
+                                             <span class="text-emerald-600 font-bold">Aktif</span>
                                         @else
                                             <span class="text-rose-600 font-bold">Nonaktif</span>
                                         @endif
                                     </div>
 
                                     <div class="flex items-center gap-2">
+                                        <a href="{{ route('admin.branches.create', ['branch_id' => $branch->id]) }}"
+                                           class="px-2.5 py-1 text-xs font-montserrat font-bold rounded-lg bg-[#ECFDF5] text-[#10B981] hover:bg-[#D1FAE5] transition">
+                                            + Admin
+                                        </a>
                                         <a href="{{ route('admin.branches.edit', $branch) }}"
                                            class="px-2.5 py-1 text-xs font-montserrat font-bold rounded-lg bg-[#FFF7ED] text-[#FF6B00]">
                                             Edit

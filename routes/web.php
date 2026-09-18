@@ -37,6 +37,34 @@ if (app()->environment('local')) {
 
         return redirect($redirect);
     });
+
+    Route::get('/preview-403', function () {
+        abort(403, 'Akses ditolak. Anda tidak memiliki izin untuk membuka halaman manajemen ini.');
+    });
+
+    Route::get('/preview-404', function () {
+        abort(404, 'Halaman materi atau sesi pelatihan yang Anda tuju tidak ditemukan dalam sistem.');
+    });
+
+    Route::get('/preview-cert-html', function () {
+        $submission = \App\Models\GraduationSubmission::find(1);
+        $enrollment = $submission->enrollment;
+        $student = $enrollment->user;
+        $class = $enrollment->trainingClass;
+        $branch = $class->branch;
+        $trainer = $submission->trainer;
+        $qrCodeBase64 = $submission->getQrCodeBase64();
+
+        return view('certificates.template', compact(
+            'submission',
+            'enrollment',
+            'student',
+            'class',
+            'branch',
+            'trainer',
+            'qrCodeBase64'
+        ));
+    });
 }
 
 // Central Dashboard Dispatcher (Peserta Default)

@@ -94,9 +94,9 @@ class QuizAttemptController extends Controller
         $questionsQuery = $quiz->questions()->with('options');
         $questions = $quiz->is_randomized ? $questionsQuery->get()->shuffle() : $questionsQuery->get();
 
-        // Hitung sisa waktu pengerjaan dalam detik
+        // Hitung sisa waktu pengerjaan dalam detik (dibulatkan bulat)
         $deadline = $attempt->started_at->addMinutes($quiz->time_limit_minutes);
-        $secondsRemaining = max(0, now()->diffInSeconds($deadline, false));
+        $secondsRemaining = (int) max(0, round(now()->diffInSeconds($deadline, false)));
 
         return view('peserta.quizzes.take', compact('class', 'quiz', 'attempt', 'questions', 'secondsRemaining'));
     }

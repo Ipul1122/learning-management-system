@@ -148,4 +148,14 @@ class AdminCabangManagementTest extends TestCase
             'action' => 'DELETE',
         ]);
     }
+
+    public function test_super_admin_accessing_admin_create_is_redirected_to_branch_create(): void
+    {
+        $response = $this->actingAs($this->superAdmin)
+            ->get(route('admin.admins.create'));
+
+        $response->assertRedirect(route('admin.branches.create'));
+        $response->assertSessionHas('info');
+    }
 }
+

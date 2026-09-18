@@ -112,6 +112,10 @@ test('peserta dapat memulai kuis baru dan diarahkan ke lembar soal', function ()
     expect($attempt->attempt_number)->toBe(1);
 
     $response->assertRedirect(route('peserta.quizzes.take', [$class, $quiz, $attempt]));
+
+    $takeRes = $this->actingAs($peserta)->get(route('peserta.quizzes.take', [$class, $quiz, $attempt]));
+    $takeRes->assertOk();
+    $takeRes->assertViewHas('secondsRemaining', fn ($val) => is_int($val) && $val > 0);
 });
 
 test('peserta mengirim jawaban kuis dan sistem melakukan auto-grading otomatis secara instan', function () {

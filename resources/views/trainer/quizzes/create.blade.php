@@ -151,6 +151,10 @@
                                 </svg>
                                 Simpan & Publikasikan Kuis
                             </button>
+                            <div x-show="selectedIds.length === 0" class="text-[11px] text-amber-800 bg-amber-50 border border-amber-200 rounded-xl p-2.5 mt-2.5 flex items-start gap-2 font-quicksand">
+                                <span class="text-amber-500 font-bold shrink-0">⚠️</span>
+                                <span>Pilih minimal <strong>1 butir soal</strong> di kolom sebelah kanan untuk mengaktifkan tombol simpan.</span>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -248,7 +252,26 @@
                                 </label>
                             </template>
 
-                            <template x-if="filteredQuestions.length === 0">
+                            <!-- Empty State when Question Bank has 0 items -->
+                            <template x-if="questions.length === 0">
+                                <div class="py-12 px-4 text-center bg-[#FAF8F5] rounded-2xl border border-dashed border-[#EBE5DF]">
+                                    <div class="w-12 h-12 rounded-2xl bg-amber-50 text-[#FF6B00] border border-amber-200 flex items-center justify-center mx-auto mb-3 text-xl">
+                                        📝
+                                    </div>
+                                    <h3 class="font-montserrat font-bold text-sm text-[#1E1B18] mb-1">Bank Soal Cabang Masih Kosong</h3>
+                                    <p class="text-xs text-[#6E675F] max-w-sm mx-auto mb-4 font-quicksand">
+                                        Cabang ini belum memiliki butir soal yang tersimpan. Anda perlu menambahkan butir soal ke Bank Soal terlebih dahulu sebelum dapat merancang dan menyimpan paket kuis.
+                                    </p>
+                                    <a href="{{ route('trainer.questions.create') }}" class="inline-flex items-center gap-2 px-4 py-2.5 text-xs font-montserrat font-bold text-white bg-gradient-to-r from-[#FF6B00] to-[#E11D48] hover:from-[#EA580C] hover:to-[#DC2626] rounded-xl shadow-md transition">
+                                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4" />
+                                        </svg>
+                                        <span>+ Buat Butir Soal di Bank Soal</span>
+                                    </a>
+                                </div>
+                            </template>
+
+                            <template x-if="questions.length > 0 && filteredQuestions.length === 0">
                                 <div class="py-10 text-center text-[#A8A29E] text-xs font-quicksand">
                                     Tidak ada butir soal yang cocok dengan filter atau kata kunci pencarian.
                                 </div>
