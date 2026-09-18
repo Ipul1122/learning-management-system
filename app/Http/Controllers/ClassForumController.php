@@ -60,6 +60,15 @@ class ClassForumController extends Controller
             'is_locked' => false,
         ]);
 
+        // Gamifikasi: +15 XP Partisipasi Forum & Cek Lencana Aktivis Diskusi
+        app(\App\Services\GamificationService::class)->awardPoints(
+            $user,
+            15,
+            'forum',
+            "Membuat Topik Diskusi: '{$thread->title}'",
+            $thread->id
+        );
+
         return redirect()
             ->route('classes.forum.show', [$class, $thread])
             ->with('success', 'Topik diskusi berhasil diterbitkan!');
@@ -104,12 +113,21 @@ class ClassForumController extends Controller
             $parentReplyId = $parent->id;
         }
 
-        ForumReply::create([
+        $reply = ForumReply::create([
             'thread_id' => $thread->id,
             'author_id' => $user->id,
             'parent_reply_id' => $parentReplyId,
             'reply_content' => $request->input('reply_content'),
         ]);
+
+        // Gamifikasi: +15 XP Balasan Forum & Cek Lencana Aktivis Diskusi
+        app(\App\Services\GamificationService::class)->awardPoints(
+            $user,
+            15,
+            'forum',
+            "Membalas Topik Diskusi: '{$thread->title}'",
+            $reply->id
+        );
 
         return redirect()->route('classes.forum.show', [$class, $thread])
             ->with('success', 'Tanggapan berhasil dikirimkan!');

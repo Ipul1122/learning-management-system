@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Sertifikat Kelulusan - {{ $student->name }}</title>
+    <title>Sertifikat Kelulusan - Dimas Pratama</title>
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@600;700;800;900&family=Playfair+Display:ital,wght@0,600;0,700;1,400;1,600&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -487,9 +487,9 @@
                     Lembaga Pelatihan Kerja & Pengembangan Kompetensi Kejuruan
                 </div>
                 <div class="branch-badge">
-                    <span>KANTOR CABANG {{ strtoupper($branch->name ?? 'PUSAT') }}</span>
+                    <span>KANTOR CABANG CABANG JAKARTA BARAT</span>
                     <span class="dot"></span>
-                    <span>KODE REGIONAL: {{ $branch->code ?? 'CBG-LMS' }}</span>
+                    <span>KODE REGIONAL: CBG-JKB</span>
                 </div>
             </div>
 
@@ -498,7 +498,7 @@
                 <h1 class="main-title">Sertifikat Kelulusan</h1>
                 <div class="sub-title">Certificate of Completion & Professional Competence</div>
                 <div class="cert-serial-pill">
-                    NOMOR REGISTRASI RESMI: {{ $submission->certificate_number }}
+                    NOMOR REGISTRASI RESMI: CERT-2026-JKT-00001
                 </div>
             </div>
 
@@ -506,7 +506,7 @@
             <div class="cert-recipient">
                 <div class="awarded-text">Diberikan dan dianugerahkan secara terhormat kepada:</div>
                 <div class="student-name">
-                    {{ strtoupper($student->name) }}
+                    DIMAS PRATAMA
                 </div>
             </div>
 
@@ -514,11 +514,11 @@
             <div class="cert-statement">
                 Telah menyelesaikan seluruh rangkaian kurikulum, silabus pembelajaran teori dan praktik, serta dinyatakan
                 <strong style="color: #0f172a; font-weight: 800;">LULUS KOMPETEN</strong> pada program pelatihan kejuruan intensif:
-                <span class="class-title">&ldquo;{{ $class->title }}&rdquo;</span>
+                <span class="class-title">&ldquo;Cara menemukan jati diri yang baik&rdquo;</span>
                 Dengan akumulasi beban studi kumulatif sebesar
                 <span class="jp-highlight-badge">
                     <svg width="14" height="14" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm1-12a1 1 0 10-2 0v4a1 1 0 00.293.707l2.828 2.829a1 1 0 101.415-1.415L11 9.586V6z" clip-rule="evenodd"/></svg>
-                    {{ $submission->total_jp_earned }} Jam Pelajaran (JP)
+                    20 Jam Pelajaran (JP)
                 </span>
                 setara 900 menit pembelajaran efektif, serta telah menuntaskan seluruh evaluasi kuis dengan pencapaian predikat kompeten.
             </div>
@@ -528,7 +528,7 @@
                 <!-- QR Code Verification Card -->
                 <div class="footer-qr-card">
                     <div class="qr-img-wrap">
-                        <img src="{{ $qrCodeBase64 }}" width="72" height="72" alt="QR Code Keaslian">
+                        <img src="data:image/svg+xml;base64,PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz4KPHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZlcnNpb249IjEuMSIgd2lkdGg9IjExMCIgaGVpZ2h0PSIxMTAiIHZpZXdCb3g9IjAgMCAxMTAgMTEwIj48cmVjdCB4PSIwIiB5PSIwIiB3aWR0aD0iMTEwIiBoZWlnaHQ9IjExMCIgZmlsbD0iI2ZmZmZmZiIvPjxnIHRyYW5zZm9ybT0ic2NhbGUoMy4zMzMpIj48ZyB0cmFuc2Zvcm09InRyYW5zbGF0ZSgwLDApIj48cGF0aCBmaWxsLXJ1bGU9ImV2ZW5vZGQiIGQ9Ik04IDBMOCAxTDkgMUw5IDJMOCAyTDggNUw5IDVMOSA0TDExIDRMMTEgNUwxMCA1TDEwIDEwTDggMTBMOCAxMUw3IDExTDcgMTBMNiAxMEw2IDlMNyA5TDcgOEw2IDhMNiA5TDQgOUw0IDhMMCA4TDAgOUwxIDlMMSAxMEwwIDEwTDAgMTJMMiAxMkwyIDE0TDEgMTRMMSAxM0wwIDEzTDAgMTVMMiAxNUwyIDE2TDEgMTZMMSAxN0wwIDE3TDAgMjJMMiAyMkwyIDIzTDEgMjNMMSAyNEwwIDI0TDAgMjVMMSAyNUwxIDI0TDIgMjRMMiAyM0wzIDIzTDMgMjVMNCAyNUw0IDI0TDUgMjRMNSAyNUw4IDI1TDggMjZMOSAyNkw5IDI0TDEwIDI0TDEwIDI3TDExIDI3TDExIDI2TDEyIDI2TDEyIDI4TDExIDI4TDExIDI5TDEwIDI5TDEwIDI4TDkgMjhMOSAyOUw4IDI5TDggMzNMOSAzM0w5IDMwTDExIDMwTDExIDMxTDEwIDMxTDEwIDMyTDExIDMyTDExIDMzTDE0IDMzTDE0IDMyTDEzIDMyTDEzIDMwTDE0IDMwTDE0IDI5TDEyIDI5TDEyIDI4TDE0IDI4TDE0IDI3TDE1IDI3TDE1IDI2TDE0IDI2TDE0IDI1TDEzIDI1TDEzIDI2TDEyIDI2TDEyIDI0TDE3IDI0TDE3IDI1TDE2IDI1TDE2IDI3TDE4IDI3TDE4IDI4TDE5IDI4TDE5IDI3TDIwIDI3TDIwIDMwTDIyIDMwTDIyIDMyTDIwIDMyTDIwIDMxTDE5IDMxTDE5IDMzTDIyIDMzTDIyIDMyTDIzIDMyTDIzIDI5TDI1IDI5TDI1IDMwTDI0IDMwTDI0IDMyTDI1IDMyTDI1IDMzTDI2IDMzTDI2IDMyTDI4IDMyTDI4IDMzTDI5IDMzTDI5IDMyTDI4IDMyTDI4IDMxTDI3IDMxTDI3IDMwTDI2IDMwTDI2IDI5TDMyIDI5TDMyIDMwTDMzIDMwTDMzIDI5TDMyIDI5TDMyIDI3TDMxIDI3TDMxIDI1TDMwIDI1TDMwIDI2TDI5IDI2TDI5IDI0TDMwIDI0TDMwIDIxTDMxIDIxTDMxIDI0TDMyIDI0TDMyIDI1TDMzIDI1TDMzIDI0TDMyIDI0TDMyIDIzTDMzIDIzTDMzIDIxTDMxIDIxTDMxIDIwTDMwIDIwTDMwIDIxTDI5IDIxTDI5IDI0TDI4IDI0TDI4IDIzTDI3IDIzTDI3IDIxTDI2IDIxTDI2IDIwTDI3IDIwTDI3IDE5TDI4IDE5TDI4IDIwTDI5IDIwTDI5IDE5TDMwIDE5TDMwIDE4TDMxIDE4TDMxIDE5TDMyIDE5TDMyIDIwTDMzIDIwTDMzIDE5TDMyIDE5TDMyIDE4TDMzIDE4TDMzIDE2TDMxIDE2TDMxIDE0TDMyIDE0TDMyIDEzTDMwIDEzTDMwIDE0TDI5IDE0TDI5IDE1TDI4IDE1TDI4IDEzTDI5IDEzTDI5IDExTDMxIDExTDMxIDEyTDMyIDEyTDMyIDExTDMzIDExTDMzIDhMMzIgOEwzMiA5TDMxIDlMMzEgOEwyOCA4TDI4IDlMMzEgOUwzMSAxMEwyNyAxMEwyNyA5TDI2IDlMMjYgOEwyNSA4TDI1IDZMMjQgNkwyNCA3TDIzIDdMMjMgNUwyMiA1TDIyIDRMMjQgNEwyNCA1TDI1IDVMMjUgM0wyMyAzTDIzIDJMMjUgMkwyNSAxTDI0IDFMMjQgMEwyMyAwTDIzIDFMMjIgMUwyMiAwTDIwIDBMMjAgMUwyMSAxTDIxIDJMMjIgMkwyMiA0TDIxIDRMMjEgNUwxOSA1TDE5IDRMMTcgNEwxNyAyTDE4IDJMMTggM0wxOSAzTDE5IDBMMTggMEwxOCAxTDE3IDFMMTcgMkwxNiAyTDE2IDNMMTUgM0wxNSA1TDE2IDVMMTYgN0wxNyA3TDE3IDhMMTggOEwxOCA5TDE5IDlMMTkgMTBMMTcgMTBMMTcgMTFMMTYgMTFMMTYgMTJMMTQgMTJMMTQgMTRMMTMgMTRMMTMgMTJMMTIgMTJMMTIgMTNMMTEgMTNMMTEgMTFMMTQgMTFMMTQgOEwxMyA4TDEzIDZMMTQgNkwxNCA3TDE1IDdMMTUgNkwxNCA2TDE0IDVMMTMgNUwxMyA0TDE0IDRMMTQgMkwxNSAyTDE1IDBMMTQgMEwxNCAyTDEzIDJMMTMgMEwxMiAwTDEyIDFMMTEgMUwxMSAwTDEwIDBMMTAgMUw5IDFMOSAwWk0xMSAyTDExIDRMMTIgNEwxMiAzTDEzIDNMMTMgMlpNMTYgNEwxNiA1TDE3IDVMMTcgNFpNMTIgNUwxMiA2TDExIDZMMTEgOEwxMiA4TDEyIDZMMTMgNkwxMyA1Wk0xOCA1TDE4IDZMMTcgNkwxNyA3TDE4IDdMMTggOEwxOSA4TDE5IDlMMjAgOUwyMCAxMEwxOSAxMEwxOSAxMUwxNyAxMUwxNyAxMkwxOSAxMkwxOSAxMUwyMCAxMUwyMCAxMkwyMSAxMkwyMSAxM0wyMCAxM0wyMCAxNUwyMiAxNUwyMiAxNEwyMyAxNEwyMyAxNkwyNCAxNkwyNCAxN0wyNSAxN0wyNSAxOEwyMyAxOEwyMyAxN0wyMSAxN0wyMSAxOEwyMyAxOEwyMyAxOUwyMSAxOUwyMSAyMEwyMCAyMEwyMCAxNkwxOSAxNkwxOSAxNUwxOCAxNUwxOCAxNEwxOSAxNEwxOSAxM0wxNiAxM0wxNiAxNEwxNCAxNEwxNCAxNUwxMyAxNUwxMyAxNEwxMiAxNEwxMiAxNkwxMSAxNkwxMSAxM0wxMCAxM0wxMCAxNEw5IDE0TDkgMTFMOCAxMUw4IDE0TDkgMTRMOSAxNUw4IDE1TDggMThMNyAxOEw3IDE3TDYgMTdMNiAxNkw3IDE2TDcgMTVMNiAxNUw2IDE2TDUgMTZMNSAxNEw0IDE0TDQgMTJMMyAxMkwzIDExTDIgMTFMMiAxMEwxIDEwTDEgMTFMMiAxMUwyIDEyTDMgMTJMMyAxNEwyIDE0TDIgMTVMNCAxNUw0IDE3TDMgMTdMMyAxOUwxIDE5TDEgMjBMMiAyMEwyIDIyTDQgMjJMNCAyMUw2IDIxTDYgMjJMNSAyMkw1IDIzTDYgMjNMNiAyNEw3IDI0TDcgMjNMNiAyM0w2IDIyTDkgMjJMOSAyM0w4IDIzTDggMjRMOSAyNEw5IDIzTDEwIDIzTDEwIDIyTDExIDIyTDExIDIzTDE0IDIzTDE0IDIyTDE1IDIyTDE1IDIzTDE2IDIzTDE2IDIyTDE1IDIyTDE1IDIxTDE3IDIxTDE3IDIyTDE4IDIyTDE4IDIzTDE3IDIzTDE3IDI0TDE5IDI0TDE5IDI1TDIwIDI1TDIwIDI2TDIyIDI2TDIyIDI0TDIzIDI0TDIzIDIzTDIyIDIzTDIyIDIyTDIzIDIyTDIzIDIxTDI0IDIxTDI0IDIyTDI1IDIyTDI1IDIzTDI2IDIzTDI2IDI0TDI3IDI0TDI3IDIzTDI2IDIzTDI2IDIyTDI1IDIyTDI1IDIwTDI2IDIwTDI2IDE1TDI0IDE1TDI0IDEzTDI2IDEzTDI2IDE0TDI3IDE0TDI3IDEzTDI4IDEzTDI4IDExTDI2IDExTDI2IDEyTDI1IDEyTDI1IDlMMjQgOUwyNCA4TDIyIDhMMjIgNUwyMSA1TDIxIDdMMjAgN0wyMCA2TDE5IDZMMTkgNVpNOCA2TDggN0w5IDdMOSA2Wk0xOCA2TDE4IDdMMTkgN0wxOSA4TDIwIDhMMjAgN0wxOSA3TDE5IDZaTTggOEw4IDlMOSA5TDkgOFpNMjEgOEwyMSAxMUwyMiAxMUwyMiA4Wk0xMSA5TDExIDEwTDEyIDEwTDEyIDlaTTIzIDlMMjMgMTJMMjIgMTJMMjIgMTNMMjMgMTNMMjMgMTJMMjQgMTJMMjQgOVpNNSAxMEw1IDEyTDcgMTJMNyAxMUw2IDExTDYgMTBaTTMxIDEwTDMxIDExTDMyIDExTDMyIDEwWk02IDEzTDYgMTRMNyAxNEw3IDEzWk0xNCAxNUwxNCAxOEwxMyAxOEwxMyAyMUwxNSAyMUwxNSAxOUwxNiAxOUwxNiAyMEwxNyAyMEwxNyAyMUwxOCAyMUwxOCAxOUwxOSAxOUwxOSAxN0wxOCAxN0wxOCAxOEwxNyAxOEwxNyAxN0wxNiAxN0wxNiAxNkwxNyAxNkwxNyAxNVpNMjcgMTVMMjcgMTdMMjggMTdMMjggMTVaTTI5IDE1TDI5IDE2TDMwIDE2TDMwIDE1Wk05IDE2TDkgMTdMMTAgMTdMMTAgMThMOSAxOEw5IDIxTDEwIDIxTDEwIDE4TDExIDE4TDExIDE3TDEwIDE3TDEwIDE2Wk0xMiAxNkwxMiAxN0wxMyAxN0wxMyAxNlpNNCAxN0w0IDE4TDUgMThMNSAyMEw2IDIwTDYgMjFMOCAyMUw4IDIwTDYgMjBMNiAxOUw3IDE5TDcgMThMNSAxOEw1IDE3Wk0zMSAxN0wzMSAxOEwzMiAxOEwzMiAxN1pNMTYgMThMMTYgMTlMMTcgMTlMMTcgMThaTTI4IDE4TDI4IDE5TDI5IDE5TDI5IDE4Wk0xMSAxOUwxMSAyMEwxMiAyMEwxMiAxOVpNMjEgMjBMMjEgMjFMMTkgMjFMMTkgMjJMMjAgMjJMMjAgMjNMMjEgMjNMMjEgMjJMMjIgMjJMMjIgMjBaTTIwIDI0TDIwIDI1TDIxIDI1TDIxIDI0Wk0yNSAyNUwyNSAyOEwyOCAyOEwyOCAyNVpNMTMgMjZMMTMgMjdMMTQgMjdMMTQgMjZaTTE4IDI2TDE4IDI3TDE5IDI3TDE5IDI2Wk0yNiAyNkwyNiAyN0wyNyAyN0wyNyAyNlpNMjMgMjdMMjMgMjhMMjIgMjhMMjIgMjlMMjMgMjlMMjMgMjhMMjQgMjhMMjQgMjdaTTE1IDI4TDE1IDI5TDE2IDI5TDE2IDI4Wk0xMSAyOUwxMSAzMEwxMiAzMEwxMiAyOVpNMTggMjlMMTggMzBMMTUgMzBMMTUgMzFMMTYgMzFMMTYgMzJMMTUgMzJMMTUgMzNMMTggMzNMMTggMzBMMTkgMzBMMTkgMjlaTTI5IDMwTDI5IDMxTDMwIDMxTDMwIDMwWk0xMSAzMUwxMSAzMkwxMiAzMkwxMiAzMVpNMjUgMzFMMjUgMzJMMjYgMzJMMjYgMzFaTTMyIDMxTDMyIDMyTDMzIDMyTDMzIDMxWk0zMCAzMkwzMCAzM0wzMSAzM0wzMSAzMlpNMCAwTDAgN0w3IDdMNyAwWk0xIDFMMSA2TDYgNkw2IDFaTTIgMkwyIDVMNSA1TDUgMlpNMjYgMEwyNiA3TDMzIDdMMzMgMFpNMjcgMUwyNyA2TDMyIDZMMzIgMVpNMjggMkwyOCA1TDMxIDVMMzEgMlpNMCAyNkwwIDMzTDcgMzNMNyAyNlpNMSAyN0wxIDMyTDYgMzJMNiAyN1pNMiAyOEwyIDMxTDUgMzFMNSAyOFoiIGZpbGw9IiMxZTFiMTgiLz48L2c+PC9nPjwvc3ZnPgo=" width="72" height="72" alt="QR Code Keaslian">
                     </div>
                     <div>
                         <div class="qr-meta-title">Autentikasi Digital</div>
@@ -536,7 +536,7 @@
                             Pindai QR Code untuk verifikasi<br>keaslian sertifikat pada sistem LMS
                         </div>
                         <div class="qr-meta-code">
-                            {{ $submission->certificate_number }}
+                            CERT-2026-JKT-00001
                         </div>
                     </div>
                 </div>
@@ -562,7 +562,7 @@
                 <!-- Trainer Official Signature -->
                 <div class="footer-signature-wrap">
                     <div class="sign-date-location">
-                        {{ $branch->city ?? 'Jakarta' }}, {{ $submission->reviewed_at ? \Carbon\Carbon::parse($submission->reviewed_at)->translatedFormat('d F Y') : \Carbon\Carbon::now()->translatedFormat('d F Y') }}
+                        KOTA JAKARTA BARAT, 18 September 2026
                     </div>
                     <div class="signature-canvas">
                         <!-- Graceful Stylized Vector Signature -->
@@ -574,7 +574,7 @@
                     </div>
                     <div class="sign-divider-line"></div>
                     <div class="trainer-full-name">
-                        {{ $trainer->name }}
+                        Ahmad Fauzi, M.Kom
                     </div>
                     <div class="trainer-role-title">
                         Instruktur Pengampu Pelatihan

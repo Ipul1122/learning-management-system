@@ -9,6 +9,7 @@ use App\Http\Controllers\ClassForumController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\NewsController;
 use App\Http\Controllers\Peserta\ClassCatalogController;
+use App\Http\Controllers\Peserta\GamificationController;
 use App\Http\Controllers\Peserta\GraduationController;
 use App\Http\Controllers\Peserta\QuizAttemptController;
 use App\Http\Controllers\Peserta\StudyRoomController;
@@ -26,6 +27,17 @@ use Illuminate\Support\Facades\Route;
 Route::get('/', function () {
     return view('welcome');
 });
+
+// Helper otentikasi cepat untuk screenshot di environment local
+if (app()->environment('local')) {
+    Route::get('/screenshot-auth/{role}', function (string $role) {
+        $user = \App\Models\User::role($role)->firstOrFail();
+        \Illuminate\Support\Facades\Auth::login($user);
+        $redirect = request('redirect', '/dashboard');
+
+        return redirect($redirect);
+    });
+}
 
 // Central Dashboard Dispatcher (Peserta Default)
 Route::get('/dashboard', [DashboardController::class, 'index'])
@@ -137,6 +149,10 @@ Route::middleware(['auth', 'role:peserta'])
         Route::get('certificates/{submission}/download', [GraduationController::class, 'download'])->name('certificates.download');
         Route::get('certificates/{submission}/preview', [GraduationController::class, 'preview'])->name('certificates.preview');
         Route::post('certificates/{class}/request-review', [GraduationController::class, 'requestReview'])->name('certificates.requestReview');
+
+        // Motivasi Peserta: Gamifikasi (Papan Peringkat / Leaderboard & Lencana Prestasi)
+        Route::get('leaderboard', [GamificationController::class, 'leaderboard'])->name('leaderboard');
+        Route::get('badges', [GamificationController::class, 'badges'])->name('badges');
     });
 
 // Modul Berita & Informasi Publik (Fase 6: PRD 3.4 & 4.3)
@@ -171,3 +187,4 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+

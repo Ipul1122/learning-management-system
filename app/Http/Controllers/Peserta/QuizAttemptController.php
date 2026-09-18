@@ -169,6 +169,16 @@ class QuizAttemptController extends Controller
             branchId: $class->branch_id
         );
 
+        // Gamifikasi: Perolehan XP dari nilai kuis & Cek Lencana Akurasi Kuis
+        $earnedXp = max(10, (int) round(($attempt->fresh()->total_score ?? 0) / 2));
+        app(\App\Services\GamificationService::class)->awardPoints(
+            $user,
+            $earnedXp,
+            'quiz',
+            "Penyelesaian Kuis '{$quiz->title}' (Skor: {$attempt->fresh()->total_score})",
+            $attempt->id
+        );
+
         return redirect()
             ->route('peserta.quizzes.result', [$class, $quiz, $attempt])
             ->with('success', 'Jawaban kuis Anda berhasil dikirimkan dan dievaluasi!');

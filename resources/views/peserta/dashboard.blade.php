@@ -71,6 +71,78 @@
             </div>
         </div>
 
+        <!-- Gamifikasi & Motivasi Belajar Widget (Poin XP, Lencana & Rank) -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+            <!-- 1. Level & Gelar -->
+            <div class="bg-white border border-[#EBE5DF] rounded-2xl p-5 shadow-sm space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-[#6E675F] uppercase tracking-wider font-montserrat">Tingkat / Level</span>
+                    <span class="p-1.5 rounded-lg bg-purple-50 text-purple-700 border border-purple-200">
+                        🎖️
+                    </span>
+                </div>
+                <div class="flex items-baseline gap-2">
+                    <span class="text-2xl font-extrabold font-montserrat text-purple-700">Level {{ $user->level }}</span>
+                </div>
+                <p class="text-[11px] text-[#6E675F] font-quicksand line-clamp-1">{{ $user->rank_title }}</p>
+                <div class="w-full bg-[#FAF8F5] h-1.5 rounded-full overflow-hidden border border-[#EBE5DF]">
+                    <div class="h-full bg-purple-600 rounded-full" style="width: {{ $user->level_progress_percentage }}%"></div>
+                </div>
+            </div>
+
+            <!-- 2. Akumulasi Poin XP -->
+            <div class="bg-white border border-[#EBE5DF] rounded-2xl p-5 shadow-sm space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-[#6E675F] uppercase tracking-wider font-montserrat">Poin XP Belajar</span>
+                    <span class="p-1.5 rounded-lg bg-orange-50 text-[#FF6B00] border border-orange-200">
+                        ⚡
+                    </span>
+                </div>
+                <div class="flex items-baseline gap-1.5">
+                    <span class="text-2xl font-extrabold font-montserrat text-[#FF6B00] font-mono">{{ number_format($user->total_points ?? 0) }}</span>
+                    <span class="text-xs text-[#6E675F]">XP</span>
+                </div>
+                <p class="text-[11px] text-[#6E675F] font-mono">Next: {{ number_format($user->next_level_threshold) }} XP</p>
+            </div>
+
+            <!-- 3. Lencana Prestasi -->
+            <div class="bg-white border border-[#EBE5DF] rounded-2xl p-5 shadow-sm space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-[#6E675F] uppercase tracking-wider font-montserrat">Lencana Prestasi</span>
+                    <span class="p-1.5 rounded-lg bg-amber-50 text-amber-600 border border-amber-200">
+                        🏅
+                    </span>
+                </div>
+                <div class="flex items-baseline gap-1.5">
+                    <span class="text-2xl font-extrabold font-montserrat text-amber-600">{{ $user->badges->count() }}</span>
+                    <span class="text-xs text-[#6E675F]">/ 6 Terbuka</span>
+                </div>
+                <a href="{{ route('peserta.badges') }}" class="text-[11px] text-[#FF6B00] hover:underline font-bold block pt-0.5">
+                    Lihat Koleksi Lencana &rarr;
+                </a>
+            </div>
+
+            <!-- 4. Papan Peringkat (Leaderboard) -->
+            <div class="bg-white border border-[#EBE5DF] rounded-2xl p-5 shadow-sm space-y-2">
+                <div class="flex items-center justify-between">
+                    <span class="text-xs font-bold text-[#6E675F] uppercase tracking-wider font-montserrat">Peringkat Nasional</span>
+                    <span class="p-1.5 rounded-lg bg-emerald-50 text-emerald-600 border border-emerald-200">
+                        🏆
+                    </span>
+                </div>
+                <div class="flex items-baseline gap-1.5">
+                    @php
+                        $myRank = \App\Models\User::role('peserta')->where('total_points', '>', $user->total_points ?? 0)->count() + 1;
+                    @endphp
+                    <span class="text-2xl font-extrabold font-montserrat text-emerald-600">#{{ $myRank }}</span>
+                    <span class="text-xs text-[#6E675F]">Nasional</span>
+                </div>
+                <a href="{{ route('peserta.leaderboard') }}" class="text-[11px] text-emerald-700 hover:underline font-bold block pt-0.5">
+                    Buka Leaderboard &rarr;
+                </a>
+            </div>
+        </div>
+
         <!-- Quick Access Nav Cards -->
         <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-5">
             <!-- 4.2 Katalog Kelas -->

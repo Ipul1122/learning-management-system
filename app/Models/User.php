@@ -16,7 +16,7 @@ use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
 use Spatie\Permission\Traits\HasRoles;
 
-#[Fillable(['name', 'email', 'password', 'branch_id', 'phone_number', 'avatar', 'status', 'email_verified_at'])]
+#[Fillable(['name', 'email', 'password', 'branch_id', 'phone_number', 'avatar', 'status', 'email_verified_at', 'total_points', 'level'])]
 #[Hidden(['password', 'remember_token'])]
 class User extends Authenticatable
 {
@@ -204,5 +204,58 @@ class User extends Authenticatable
     public function forumReplies(): HasMany
     {
         return $this->hasMany(ForumReply::class, 'author_id');
+    }
+
+    /**
+     * Lencana prestasi yang telah diraih pengguna.
+     */
+    public function badges(): BelongsToMany
+    {
+        return $this->belongsToMany(Badge::class, 'user_badges')
+            ->withPivot('earned_at');
+    }
+
+    /**
+     * Riwayat transaksi perolehan poin XP.
+     */
+    public function pointTransactions(): HasMany
+    {
+        return $this->hasMany(PointTransaction::class, 'user_id');
+    }
+
+    /**
+     * Gelar tingkat/level pengguna.
+     */
+    public function getRankTitleAttribute(): string
+    {
+        $lvl = $this->level ?? 1;
+
+        return match (true) {
+            $lvl >= 5 => 'Master Kejuruan (Grandmaster)',
+            $lvl === 4 => 'Cendekia (Expert)',
+            $lvl === 3 => 'Pejuang Belajar (Warrior)',
+            $lvl === 2 => 'Penjelajah (Explorer)',
+            default => 'Pemula (Novice)',
+        };
+    }
+
+    /**
+     * Target poin untuk naik ke level berikutnya.
+     */
+    public function getNextLevelThresholdAttribute(): int
+    {
+        return ($this->level ?? 1) * 200;
+    }
+
+    /**
+     * Persentase progres poin pada level saat ini.
+     */
+    public function getLevelProgressPercentageAttribute(): float
+    {
+        $lvl = $this->level ?? 1;
+        $currentLvlStart = ($lvl - 1) * 200;
+        $currentLvlPoints = max(0, ($this->total_points ?? 0) - $currentLvlStart);
+
+        return min(100.0, round(($currentLvlPoints / 200) * 100, 1));
     }
 }

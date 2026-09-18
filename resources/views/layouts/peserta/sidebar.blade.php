@@ -58,6 +58,32 @@
             <span>E-Sertifikat</span>
         </a>
 
+        <!-- Section Gamifikasi & Komunitas -->
+        <div class="px-3 pt-3 pb-1 text-[10px] font-montserrat font-bold uppercase tracking-wider text-[#6E675F]">
+            Gamifikasi & Komunitas
+        </div>
+
+        <!-- Leaderboard / Ranking -->
+        <a href="{{ route('peserta.leaderboard') }}"
+           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-montserrat font-bold text-xs transition duration-150 {{ request()->routeIs('peserta.leaderboard') ? 'bg-gradient-to-r from-[#FF6B00] to-[#E11D48] text-white shadow-md' : 'text-[#FAF8F5]/80 hover:text-white hover:bg-white/5' }}">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+            </svg>
+            <div class="flex items-center justify-between flex-1">
+                <span>Leaderboard / Ranking</span>
+                <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-[#FF6B00]/20 text-[#FF6B00] border border-[#FF6B00]/30 font-mono font-bold">TOP</span>
+            </div>
+        </a>
+
+        <!-- Lencana Prestasi -->
+        <a href="{{ route('peserta.badges') }}"
+           class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-montserrat font-bold text-xs transition duration-150 {{ request()->routeIs('peserta.badges') ? 'bg-gradient-to-r from-[#FF6B00] to-[#E11D48] text-white shadow-md' : 'text-[#FAF8F5]/80 hover:text-white hover:bg-white/5' }}">
+            <svg class="w-5 h-5 flex-shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+            </svg>
+            <span>Lencana Prestasi</span>
+        </a>
+
         <!-- Berita & Pengumuman (Fase 6) -->
         <a href="{{ route('news.index') }}"
            class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-montserrat font-bold text-xs transition duration-150 {{ request()->routeIs('news.*') ? 'bg-gradient-to-r from-[#FF6B00] to-[#E11D48] text-white shadow-md' : 'text-[#FAF8F5]/80 hover:text-white hover:bg-white/5' }}">
@@ -76,7 +102,11 @@
             </div>
             <div class="flex-1 min-w-0">
                 <div class="font-montserrat font-bold text-xs text-white truncate">{{ Auth::user()->name }}</div>
-                <div class="text-[10px] text-[#10B981] truncate font-mono">Peserta Pelatihan</div>
+                <div class="flex items-center gap-1.5 text-[10px] text-[#10B981] font-mono">
+                    <span>Lv. {{ Auth::user()->level ?? 1 }}</span>
+                    <span class="text-[#6E675F]">•</span>
+                    <span class="text-[#FF6B00] font-bold">{{ Auth::user()->total_points ?? 0 }} XP</span>
+                </div>
             </div>
             <form method="POST" action="{{ route('logout') }}">
                 @csrf
@@ -167,6 +197,32 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 14l6.16-3.422a12.083 12.083 0 01.665 6.479A11.952 11.952 0 0012 20.055a11.952 11.952 0 00-6.824-2.998 12.078 12.078 0 01.665-6.479L12 14z" />
                 </svg>
                 <span>E-Sertifikat</span>
+            </a>
+
+            <!-- Section Gamifikasi & Komunitas Mobile -->
+            <div class="px-3 pt-3 pb-1 text-[10px] font-montserrat font-bold uppercase tracking-wider text-[#6E675F]">
+                Gamifikasi & Komunitas
+            </div>
+
+            <!-- Leaderboard / Ranking -->
+            <a href="{{ route('peserta.leaderboard') }}"
+               class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-montserrat font-bold text-xs {{ request()->routeIs('peserta.leaderboard') ? 'bg-gradient-to-r from-[#FF6B00] to-[#E11D48] text-white' : 'text-white/80 hover:bg-white/5' }}">
+                <svg class="w-5 h-5 fill-none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                </svg>
+                <div class="flex items-center justify-between flex-1">
+                    <span>Leaderboard / Ranking</span>
+                    <span class="text-[9px] px-1.5 py-0.5 rounded-full bg-[#FF6B00]/20 text-[#FF6B00] border border-[#FF6B00]/30 font-mono font-bold">TOP</span>
+                </div>
+            </a>
+
+            <!-- Lencana Prestasi -->
+            <a href="{{ route('peserta.badges') }}"
+               class="flex items-center gap-3 px-3.5 py-2.5 rounded-xl font-montserrat font-bold text-xs {{ request()->routeIs('peserta.badges') ? 'bg-gradient-to-r from-[#FF6B00] to-[#E11D48] text-white' : 'text-white/80 hover:bg-white/5' }}">
+                <svg class="w-5 h-5 fill-none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z" />
+                </svg>
+                <span>Lencana Prestasi</span>
             </a>
 
             <!-- Berita & Pengumuman (Fase 6) -->
