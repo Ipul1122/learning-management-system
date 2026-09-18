@@ -117,6 +117,15 @@ class StudyRoomController extends Controller
                 new: $attendance->toArray(),
                 branchId: $class->branch_id
             );
+
+            // Gamifikasi: +20 XP Presensi Sesi Belajar
+            app(\App\Services\GamificationService::class)->awardPoints(
+                $user,
+                20,
+                'attendance',
+                "Presensi Sesi: {$session->title} ({$session->minute_duration} Menit)",
+                $attendance->id
+            );
         }
 
         return redirect()->away($session->zoom_url);

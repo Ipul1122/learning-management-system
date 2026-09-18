@@ -151,6 +151,15 @@ class ClassCatalogController extends Controller
                 branchId: $class->branch_id
             );
 
+            // Gamifikasi: +50 XP Pendaftaran Kelas & Cek Lencana Langkah Awal
+            app(\App\Services\GamificationService::class)->awardPoints(
+                $user,
+                50,
+                'enrollment',
+                "Pendaftaran Kelas Pelatihan: {$class->title}",
+                $enrollment->id
+            );
+
             return redirect()
                 ->route('peserta.study.show', $class)
                 ->with('success', "Selamat! Anda berhasil terdaftar di kelas '{$class->title}'. Mari mulai pengumpulan 20 JP!");

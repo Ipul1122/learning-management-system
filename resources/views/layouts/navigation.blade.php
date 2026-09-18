@@ -44,6 +44,39 @@
                             {{ __('Log Aktivitas') }}
                         </x-nav-link>
                     @endrole
+
+                    @role('trainer')
+                        <x-nav-link :href="route('trainer.classes.index')" :active="request()->routeIs('trainer.classes.*')">
+                            {{ __('Kelas Diampu') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('trainer.questions.index')" :active="request()->routeIs('trainer.questions.*')">
+                            {{ __('Bank Soal') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('trainer.quizzes.index')" :active="request()->routeIs('trainer.quizzes.*')">
+                            {{ __('Paket Kuis') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('trainer.graduations.index')" :active="request()->routeIs('trainer.graduations.*')">
+                            {{ __('Verifikasi 20 JP') }}
+                        </x-nav-link>
+                    @endrole
+
+                    @role('peserta')
+                        <x-nav-link :href="route('peserta.catalog.index')" :active="request()->routeIs('peserta.catalog.*')">
+                            {{ __('Katalog Kelas') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('peserta.study.index')" :active="request()->routeIs('peserta.study.*')">
+                            {{ __('Ruang Belajar') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('peserta.certificates.index')" :active="request()->routeIs('peserta.certificates.*')">
+                            {{ __('Sertifikat') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('peserta.leaderboard')" :active="request()->routeIs('peserta.leaderboard')">
+                            {{ __('Leaderboard') }}
+                        </x-nav-link>
+                        <x-nav-link :href="route('peserta.badges')" :active="request()->routeIs('peserta.badges')">
+                            {{ __('Lencana') }}
+                        </x-nav-link>
+                    @endrole
                 </div>
             </div>
 
@@ -136,6 +169,39 @@
                 </x-responsive-nav-link>
                 <x-responsive-nav-link :href="route('cabang.logs.index')" :active="request()->routeIs('cabang.logs.*')">
                     {{ __('Log Aktivitas') }}
+                </x-responsive-nav-link>
+            @endrole
+
+            @role('trainer')
+                <x-responsive-nav-link :href="route('trainer.classes.index')" :active="request()->routeIs('trainer.classes.*')">
+                    {{ __('Kelas Diampu') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('trainer.questions.index')" :active="request()->routeIs('trainer.questions.*')">
+                    {{ __('Bank Soal') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('trainer.quizzes.index')" :active="request()->routeIs('trainer.quizzes.*')">
+                    {{ __('Paket Kuis') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('trainer.graduations.index')" :active="request()->routeIs('trainer.graduations.*')">
+                    {{ __('Verifikasi 20 JP') }}
+                </x-responsive-nav-link>
+            @endrole
+
+            @role('peserta')
+                <x-responsive-nav-link :href="route('peserta.catalog.index')" :active="request()->routeIs('peserta.catalog.*')">
+                    {{ __('Katalog Kelas') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('peserta.study.index')" :active="request()->routeIs('peserta.study.*')">
+                    {{ __('Ruang Belajar') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('peserta.certificates.index')" :active="request()->routeIs('peserta.certificates.*')">
+                    {{ __('Sertifikat') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('peserta.leaderboard')" :active="request()->routeIs('peserta.leaderboard')">
+                    {{ __('Leaderboard') }}
+                </x-responsive-nav-link>
+                <x-responsive-nav-link :href="route('peserta.badges')" :active="request()->routeIs('peserta.badges')">
+                    {{ __('Lencana') }}
                 </x-responsive-nav-link>
             @endrole
         </div>

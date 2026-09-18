@@ -126,6 +126,15 @@ class GraduationReviewController extends Controller
             branchId: $class->branch_id
         );
 
+        // Gamifikasi: +300 XP Kelulusan Resmi & Cek Lencana Lulusan Kompeten & Juara 20 JP
+        app(\App\Services\GamificationService::class)->awardPoints(
+            $student,
+            300,
+            'graduation',
+            "Kelulusan Resmi Pelatihan: {$class->title} (No: {$certificateNumber})",
+            $submission->id
+        );
+
         return redirect()
             ->route('trainer.graduations.show', $submission)
             ->with('success', "Kelulusan peserta berhasil disetujui! E-Sertifikat resmi {$certificateNumber} telah diterbitkan.");
