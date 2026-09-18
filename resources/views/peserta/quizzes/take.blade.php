@@ -10,7 +10,7 @@
                 </h1>
             </div>
             <!-- Sticky / Live Countdown Timer with Alpine.js -->
-            <div x-data="quizCountdown({{ $secondsRemaining }})"
+            <div x-data="quizCountdown({{ (int) $secondsRemaining }})"
                  x-init="initTimer()"
                  class="flex items-center gap-3 px-4 py-2 rounded-2xl border transition-all duration-300 shadow-sm"
                  :class="remainingSeconds < 300 ? 'bg-rose-50 border-rose-300 text-rose-600 animate-pulse' : 'bg-white border-[#EBE5DF] text-[#1E1B18]'">
@@ -121,7 +121,7 @@
     <script>
         function quizCountdown(initialSeconds) {
             return {
-                remainingSeconds: initialSeconds,
+                remainingSeconds: Math.max(0, Math.floor(Number(initialSeconds) || 0)),
                 timerInterval: null,
                 initTimer() {
                     this.timerInterval = setInterval(() => {
@@ -134,8 +134,9 @@
                     }, 1000);
                 },
                 formatTime() {
-                    const minutes = Math.floor(this.remainingSeconds / 60);
-                    const seconds = this.remainingSeconds % 60;
+                    const totalSeconds = Math.max(0, Math.floor(this.remainingSeconds));
+                    const minutes = Math.floor(totalSeconds / 60);
+                    const seconds = totalSeconds % 60;
                     return `${String(minutes).padStart(2, '0')}:${String(seconds).padStart(2, '0')}`;
                 },
                 autoSubmit() {

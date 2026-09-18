@@ -28,6 +28,17 @@ class ActivityLog extends Model
     public const UPDATED_AT = null;
 
     /**
+     * The accessors to append to the model's array form.
+     *
+     * @var array<int, string>
+     */
+    protected $appends = [
+        'target_entity_label',
+        'formatted_created_at',
+        'formatted_ip_address',
+    ];
+
+    /**
      * The attributes that should be cast.
      *
      * @return array<string, string>
@@ -39,6 +50,56 @@ class ActivityLog extends Model
             'properties_new' => 'array',
             'created_at' => 'datetime',
         ];
+    }
+
+    /**
+     * Label entitas target yang ramah pengguna.
+     */
+    public function getTargetEntityLabelAttribute(): string
+    {
+        if (! $this->target_entity) {
+            return 'Sistem / Umum';
+        }
+
+        $map = [
+            'App\Models\Branch' => 'Kantor Cabang',
+            'App\Models\User' => 'Akun Pengguna',
+            'App\Models\Quiz' => 'Kuis',
+            'App\Models\Question' => 'Bank Soal',
+            'App\Models\ClassSchedule' => 'Jadwal Kelas',
+            'App\Models\ClassSession' => 'Sesi Kelas',
+            'App\Models\Course' => 'Kursus / Materi',
+            'App\Models\Enrollment' => 'Pendaftaran Kelas',
+            'App\Models\GraduationReview' => 'Review Kelulusan',
+            'App\Models\QuizAttempt' => 'Pengerjaan Kuis',
+            'App\Models\Certificate' => 'Sertifikat',
+            'App\Models\QuizQuestion' => 'Pertanyaan Kuis',
+            'App\Models\BranchClass' => 'Kelas Cabang',
+        ];
+
+        return $map[$this->target_entity] ?? class_basename($this->target_entity);
+    }
+
+    /**
+     * Format IP address dengan label ramah (misal localhost).
+     */
+    public function getFormattedIpAddressAttribute(): string
+    {
+        $ip = $this->ip_address ?? '127.0.0.1';
+
+        if (in_array($ip, ['127.0.0.1', '::1'])) {
+            return "{$ip} (Localhost / Server Internal)";
+        }
+
+        return $ip;
+    }
+
+    /**
+     * Format waktu aktivitas yang ramah pengguna.
+     */
+    public function getFormattedCreatedAtAttribute(): string
+    {
+        return $this->created_at ? $this->created_at->format('d M Y, H:i:s') . ' WIB' : '-';
     }
 
     /**
