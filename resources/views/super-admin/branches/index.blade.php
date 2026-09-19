@@ -145,7 +145,35 @@
                                         </td>
                                         <td class="py-4 px-6">
                                             <div class="font-semibold text-[#1E1B18]">{{ $branch->city }}</div>
-                                            <div class="text-xs text-[#6E675F]">{{ $branch->phone ?: '-' }}</div>
+                                            @if($branch->phone)
+                                                @php
+                                                    $cleanBranchPhone = preg_replace('/[^0-9+]/', '', $branch->phone);
+                                                    $cleanBranchWa = preg_replace('/^0/', '62', preg_replace('/[^0-9]/', '', $branch->phone));
+                                                @endphp
+                                                <div class="flex items-center gap-1.5 mt-0.5">
+                                                    <a href="tel:{{ $cleanBranchPhone }}"
+                                                       title="Hubungi telepon kantor cabang"
+                                                       class="inline-flex items-center gap-1 text-xs text-[#6E675F] hover:text-[#FF6B00] font-mono group transition-colors">
+                                                        <svg class="w-3.5 h-3.5 text-[#6E675F] group-hover:text-[#FF6B00] shrink-0 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                        </svg>
+                                                        <span class="group-hover:underline">{{ $branch->phone }}</span>
+                                                    </a>
+                                                    @if(str_starts_with($cleanBranchPhone, '08') || str_starts_with($cleanBranchPhone, '+628') || str_starts_with($cleanBranchPhone, '628'))
+                                                        <a href="https://wa.me/{{ $cleanBranchWa }}"
+                                                           target="_blank"
+                                                           rel="noopener noreferrer"
+                                                           title="Hubungi via WhatsApp"
+                                                           class="w-5 h-5 rounded bg-emerald-50 hover:bg-emerald-100 text-emerald-600 flex items-center justify-center transition shrink-0">
+                                                            <svg class="w-3 h-3" fill="currentColor" viewBox="0 0 24 24">
+                                                                <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.971.53 1.968.815 2.796.815 3.182 0 5.768-2.586 5.768-5.766 0-3.18-2.586-5.766-5.768-5.766zm9.969 5.766c0 5.514-4.486 10-10 10-1.748 0-3.385-.45-4.819-1.238l-7.181 1.882 1.916-6.997c-.88-1.488-1.396-3.23-1.396-5.087 0-5.514 4.486-10 10-10 5.514 0 10 4.486 10 10z"/>
+                                                            </svg>
+                                                        </a>
+                                                    @endif
+                                                </div>
+                                            @else
+                                                <div class="text-xs text-[#6E675F] italic">-</div>
+                                            @endif
                                         </td>
                                         <td class="py-4 px-6 text-center">
                                             <span class="inline-flex items-center px-2.5 py-1 rounded-full text-xs font-bold font-montserrat bg-[#FFF7ED] text-[#FF6B00]">
@@ -241,6 +269,34 @@
                                         {{ $branch->code }}
                                     </span>
                                 </div>
+
+                                @if($branch->phone)
+                                    @php
+                                        $cleanBranchPhone = preg_replace('/[^0-9+]/', '', $branch->phone);
+                                        $cleanBranchWa = preg_replace('/^0/', '62', preg_replace('/[^0-9]/', '', $branch->phone));
+                                    @endphp
+                                    <div class="flex items-center gap-1.5 pt-0.5">
+                                        <a href="tel:{{ $cleanBranchPhone }}"
+                                           title="Hubungi nomor telepon kantor cabang"
+                                           class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg bg-[#FAF8F5] hover:bg-[#FFF7ED] border border-[#EBE5DF] hover:border-[#FED7AA] text-xs font-mono font-medium text-[#1E1B18] hover:text-[#FF6B00] transition-colors">
+                                            <svg class="w-3.5 h-3.5 text-[#FF6B00] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                            </svg>
+                                            <span>{{ $branch->phone }}</span>
+                                        </a>
+                                        @if(str_starts_with($cleanBranchPhone, '08') || str_starts_with($cleanBranchPhone, '+628') || str_starts_with($cleanBranchPhone, '628'))
+                                            <a href="https://wa.me/{{ $cleanBranchWa }}"
+                                               target="_blank"
+                                               rel="noopener noreferrer"
+                                               title="Hubungi via WhatsApp"
+                                               class="p-1 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-600 transition shrink-0">
+                                                <svg class="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
+                                                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.971.53 1.968.815 2.796.815 3.182 0 5.768-2.586 5.768-5.766 0-3.18-2.586-5.766-5.768-5.766zm9.969 5.766c0 5.514-4.486 10-10 10-1.748 0-3.385-.45-4.819-1.238l-7.181 1.882 1.916-6.997c-.88-1.488-1.396-3.23-1.396-5.087 0-5.514 4.486-10 10-10 5.514 0 10 4.486 10 10z"/>
+                                                </svg>
+                                            </a>
+                                        @endif
+                                    </div>
+                                @endif
 
                                 <p class="text-xs text-[#6E675F] line-clamp-2">
                                     {{ $branch->address }}

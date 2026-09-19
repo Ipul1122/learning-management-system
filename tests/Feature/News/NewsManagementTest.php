@@ -172,3 +172,66 @@ test('pencarian dan filter kategori berita berfungsi dengan baik', function () {
     $responseSearch->assertSee('Maintenance Server Malam Ini');
     $responseSearch->assertDontSee('Tips Lolos Ujian 20 JP');
 });
+
+test('super admin dapat melihat editor teks wordpress pada form create dan edit berita', function () {
+    /** @var TestCase $this */
+    $superAdmin = User::where('email', 'superadmin@lms.test')->first();
+
+    $responseCreate = $this->actingAs($superAdmin)->get(route('admin.news.create'));
+    $responseCreate->assertStatus(200);
+    $responseCreate->assertSee('Editor Teks WordPress');
+    $responseCreate->assertSee('Visual');
+    $responseCreate->assertSee('Teks (HTML)');
+    $responseCreate->assertSee('Jumlah Kata:');
+
+    $post = NewsPost::create([
+        'author_id' => $superAdmin->id,
+        'title' => 'Uji Coba Editor WordPress',
+        'slug' => 'uji-coba-editor-wordpress',
+        'category' => 'pengumuman',
+        'content' => '<p><strong>Teks Tebal Awal</strong> dan <em>Teks Miring</em>.</p>',
+        'is_published' => true,
+        'published_at' => now(),
+    ]);
+
+    $responseEdit = $this->actingAs($superAdmin)->get(route('admin.news.edit', $post));
+    $responseEdit->assertStatus(200);
+    $responseEdit->assertSee('Editor Teks WordPress');
+    $responseEdit->assertSee('Teks Tebal Awal');
+});
+
+test('super admin dapat menerbitkan berita dengan format rich text html dan merender dengan benar di show', function () {
+    /** @var TestCase $this */
+    $superAdmin = User::where('email', 'superadmin@lms.test')->first();
+    $peserta = User::where('email', 'peserta1@lms.test')->first();
+
+    $richHtml = '<h2>Agenda Ujian Sertifikasi</h2><p><strong>Perhatian:</strong> Harap membawa kartu identitas dan <em>alat tulis lengkap</em>.</p><ul><li>Sesi Pagi: 08.00 WIB</li><li>Sesi Siang: 13.00 WIB</li></ul>';
+
+    $payload = [
+        'title' => 'Panduan Lengkap Ujian Nasional 2026',
+        'category' => 'Akademik',
+        'branch_id' => '',
+        'content' => $richHtml,
+        'is_published' => '1',
+    ];
+
+    $response = $this->actingAs($superAdmin)->post(route('admin.news.store'), $payload);
+    $response->assertRedirect(route('admin.news.index'));
+
+    $this->assertDatabaseHas('news_posts', [
+        'title' => 'Panduan Lengkap Ujian Nasional 2026',
+        'content' => $richHtml,
+    ]);
+
+    $post = NewsPost::where('title', 'Panduan Lengkap Ujian Nasional 2026')->first();
+
+    // Peserta mengakses halaman detail berita
+    $responseShow = $this->actingAs($peserta)->get(route('news.show', $post->slug));
+    $responseShow->assertStatus(200);
+    // Memastikan tag HTML tidak di-escape menjadi &lt;strong&gt; melainkan dirender langsung
+    $responseShow->assertSee('<h2>Agenda Ujian Sertifikasi</h2>', false);
+    $responseShow->assertSee('<strong>Perhatian:</strong>', false);
+    $responseShow->assertSee('<em>alat tulis lengkap</em>', false);
+    $responseShow->assertSee('<li>Sesi Pagi: 08.00 WIB</li>', false);
+});
+

@@ -1,18 +1,22 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex items-center justify-between gap-4">
-            <div>
-                <a href="{{ route('admin.news.index') }}" class="inline-flex items-center gap-1.5 text-xs text-[#EA580C] hover:text-[#C2410C] font-montserrat font-bold mb-1 transition">
-                    &larr; Kembali ke Daftar Berita
-                </a>
-                <h2 class="font-montserrat font-extrabold text-2xl text-[#1E1B18] leading-tight">
-                    {{ isset($post) ? 'Edit Berita & Pengumuman' : 'Tulis Berita & Pengumuman Baru' }}
-                </h2>
-            </div>
-        </div>
-    </x-slot>
+    <div class="py-8">
+        <div class="max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
-    <div class="py-6 max-w-4xl space-y-6">
+            <!-- Breadcrumb & Header Title -->
+            <div>
+                <a href="{{ route('admin.news.index') }}" class="inline-flex items-center gap-1.5 text-xs font-montserrat font-bold text-[#6E675F] hover:text-[#FF6B00] transition mb-2">
+                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18" />
+                    </svg>
+                    <span>Kembali ke Daftar Berita</span>
+                </a>
+                <h1 class="font-montserrat font-extrabold text-2xl sm:text-3xl text-[#1E1B18] tracking-tight">
+                    {{ isset($post) ? 'Edit Berita & Pengumuman' : 'Tulis Berita & Pengumuman Baru' }}
+                </h1>
+                <p class="font-quicksand text-sm text-[#6E675F] mt-1">
+                    {{ isset($post) ? 'Perbarui isi pengumuman, materi publikasi, atau cakupan wilayah penerima.' : 'Tulis dan publikasikan informasi resmi, berita kegiatan, atau pengumuman penting untuk peserta dan cabang.' }}
+                </p>
+            </div>
         @if ($errors->any())
             <div class="p-4 rounded-xl bg-rose-50 border border-rose-200 text-rose-800 text-xs space-y-1 shadow-sm">
                 <strong class="font-bold font-montserrat">Terdapat kesalahan pengisian data:</strong>
@@ -104,14 +108,21 @@
                 <p class="text-[10px] text-[#A8A29E] font-mono">Format: JPG, PNG, WEBP (Maksimal 2 MB).</p>
             </div>
 
-            <!-- Isi Konten Artikel -->
+            <!-- Isi Konten Artikel (WordPress-style Rich Editor) -->
             <div class="space-y-1.5">
-                <label for="content" class="block text-xs font-bold text-[#1E1B18] uppercase tracking-wider font-montserrat">
-                    Konten Artikel Berita / Pengumuman <span class="text-rose-500">*</span>
-                </label>
-                <textarea id="content" name="content" rows="12" required
-                          placeholder="Tuliskan isi pengumuman secara rinci, instruksi kegiatan, atau materi edukatif di sini..."
-                          class="w-full px-4 py-3 text-sm rounded-xl bg-white border border-[#EBE5DF] text-[#1E1B18] placeholder-[#A8A29E] focus:ring-2 focus:ring-[#FF6B00] font-quicksand leading-relaxed shadow-inner">{{ old('content', $post->content ?? '') }}</textarea>
+                <div class="flex items-center justify-between">
+                    <label for="content" class="block text-xs font-bold text-[#1E1B18] uppercase tracking-wider font-montserrat">
+                        Konten Artikel Berita / Pengumuman <span class="text-rose-500">*</span>
+                    </label>
+                    <span class="text-[11px] text-[#6E675F] font-quicksand hidden sm:inline">Mendukung format tebal, miring, judul, daftar, tautan & kode HTML</span>
+                </div>
+                <x-rich-editor id="content"
+                               name="content"
+                               :value="old('content', $post->content ?? '')"
+                               placeholder="Tuliskan isi pengumuman secara rinci, instruksi kegiatan, atau materi edukatif di sini..." />
+                @error('content')
+                    <p class="text-xs text-rose-600 font-montserrat font-bold mt-1">{{ $message }}</p>
+                @enderror
             </div>
 
             <!-- Status Publikasi -->
@@ -136,4 +147,5 @@
             </div>
         </form>
     </div>
+</div>
 </x-app-layout>

@@ -64,8 +64,9 @@
 
             <!-- Filter & Search Bar -->
             <div class="bg-white p-4 rounded-2xl border border-[#EBE5DF] shadow-sm">
-                <form method="GET" action="{{ route('admin.admins.index') }}" class="grid grid-cols-1 sm:grid-cols-4 gap-3">
-                    <div class="sm:col-span-2 relative">
+                <form method="GET" action="{{ route('admin.admins.index') }}" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-12 gap-3">
+                    <!-- Search query (Nama, Email, Cabang, Kota) -->
+                    <div class="sm:col-span-2 lg:col-span-3 relative">
                         <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-[#6E675F]">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
@@ -74,11 +75,12 @@
                         <input type="text"
                                name="search"
                                value="{{ request('search') }}"
-                               placeholder="Cari nama, email, atau telepon admin..."
+                               placeholder="Cari nama, email, kota..."
                                class="w-full pl-10 pr-4 py-2.5 rounded-xl border border-[#EBE5DF] bg-[#FAF8F5] text-sm text-[#1E1B18] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#FF6B00] focus:border-transparent font-quicksand transition">
                     </div>
 
-                    <div>
+                    <!-- Filter Cabang -->
+                    <div class="lg:col-span-2">
                         <select name="branch_id"
                                 onchange="this.form.submit()"
                                 class="w-full py-2.5 px-3 rounded-xl border border-[#EBE5DF] bg-[#FAF8F5] text-sm text-[#1E1B18] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#FF6B00] focus:border-transparent font-quicksand">
@@ -91,7 +93,36 @@
                         </select>
                     </div>
 
-                    <div class="flex gap-2">
+                    <!-- Filter Kota -->
+                    <div class="lg:col-span-2">
+                        <select name="city"
+                                onchange="this.form.submit()"
+                                class="w-full py-2.5 px-3 rounded-xl border border-[#EBE5DF] bg-[#FAF8F5] text-sm text-[#1E1B18] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#FF6B00] focus:border-transparent font-quicksand">
+                            <option value="">Semua Kota</option>
+                            @foreach($cities as $cityOption)
+                                <option value="{{ $cityOption }}" {{ request('city') == $cityOption ? 'selected' : '' }}>
+                                    {{ $cityOption }}
+                                </option>
+                            @endforeach
+                        </select>
+                    </div>
+
+                    <!-- Filter Nomor Telepon -->
+                    <div class="lg:col-span-2 relative">
+                        <span class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none text-[#6E675F]">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                        </span>
+                        <input type="text"
+                               name="phone"
+                               value="{{ request('phone') }}"
+                               placeholder="Filter no. telp..."
+                               class="w-full pl-9 pr-3 py-2.5 rounded-xl border border-[#EBE5DF] bg-[#FAF8F5] text-sm text-[#1E1B18] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#FF6B00] focus:border-transparent font-quicksand transition">
+                    </div>
+
+                    <!-- Filter Status -->
+                    <div class="lg:col-span-2">
                         <select name="status"
                                 onchange="this.form.submit()"
                                 class="w-full py-2.5 px-3 rounded-xl border border-[#EBE5DF] bg-[#FAF8F5] text-sm text-[#1E1B18] focus:bg-white focus:outline-none focus:ring-2 focus:ring-[#FF6B00] focus:border-transparent font-quicksand">
@@ -99,11 +130,24 @@
                             <option value="active" {{ request('status') === 'active' ? 'selected' : '' }}>Aktif Saja</option>
                             <option value="inactive" {{ request('status') === 'inactive' ? 'selected' : '' }}>Nonaktif Saja</option>
                         </select>
+                    </div>
 
-                        @if(request()->hasAny(['search', 'branch_id', 'status']))
+                    <!-- Tombol Filter & Reset -->
+                    <div class="lg:col-span-1 flex gap-1.5">
+                        <button type="submit"
+                                title="Terapkan Filter"
+                                class="flex-1 py-2.5 bg-[#1E1B18] hover:bg-[#322E2B] text-white font-montserrat font-bold text-xs rounded-xl transition flex items-center justify-center shadow-xs">
+                            <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 4a1 1 0 011-1h16a1 1 0 011 1v2.586a1 1 0 01-.293.707l-6.414 6.414a1 1 0 00-.293.707V17l-4 4v-6.586a1 1 0 00-.293-.707L3.293 7.293A1 1 0 013 6.586V4z" />
+                            </svg>
+                        </button>
+                        @if(request()->hasAny(['search', 'branch_id', 'city', 'phone', 'status']))
                             <a href="{{ route('admin.admins.index') }}"
-                               class="px-4 py-2.5 bg-[#F3EFEA] hover:bg-[#EBE5DF] text-[#1E1B18] font-montserrat font-bold text-sm rounded-xl transition flex items-center">
-                                Reset
+                               title="Reset Semua Filter"
+                               class="py-2.5 px-3 bg-[#F3EFEA] hover:bg-[#EBE5DF] text-[#1E1B18] font-montserrat font-bold text-xs rounded-xl transition flex items-center justify-center">
+                                <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                                </svg>
                             </a>
                         @endif
                     </div>
@@ -132,6 +176,7 @@
                                 <tr>
                                     <th class="py-4 px-6">Nama & Email</th>
                                     <th class="py-4 px-6">Cabang Penugasan</th>
+                                    <th class="py-4 px-6">Kota</th>
                                     <th class="py-4 px-6">Nomor Telepon</th>
                                     <th class="py-4 px-6 text-center">Status</th>
                                     <th class="py-4 px-6 text-center">Terdaftar</th>
@@ -154,15 +199,80 @@
                                         </td>
                                         <td class="py-4 px-6">
                                             @if($admin->branch)
-                                                <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#FFF7ED] text-[#FF6B00] border border-[#FED7AA]">
-                                                    {{ $admin->branch->name }}
-                                                </span>
+                                                <div class="space-y-0.5">
+                                                    <span class="inline-flex items-center px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#FFF7ED] text-[#FF6B00] border border-[#FED7AA]">
+                                                        {{ $admin->branch->name }}
+                                                    </span>
+                                                    <div class="text-[11px] font-mono text-[#6E675F]">
+                                                        {{ $admin->branch->code }}
+                                                    </div>
+                                                </div>
                                             @else
                                                 <span class="text-xs text-[#6E675F] italic">Belum Ditugaskan</span>
                                             @endif
                                         </td>
-                                        <td class="py-4 px-6 text-[#1E1B18]">
-                                            {{ $admin->phone_number ?: '-' }}
+                                        <td class="py-4 px-6">
+                                            @if($admin->branch?->city)
+                                                <span class="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-lg text-xs font-semibold bg-[#FAF8F5] text-[#1E1B18] border border-[#EBE5DF]">
+                                                    <svg class="w-3.5 h-3.5 text-[#FF6B00] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                                    </svg>
+                                                    <span>{{ $admin->branch->city }}</span>
+                                                </span>
+                                            @else
+                                                <span class="text-xs text-[#6E675F] italic">-</span>
+                                            @endif
+                                        </td>
+                                        <td class="py-4 px-6">
+                                            <div class="space-y-1">
+                                                @if($admin->phone_number)
+                                                    @php
+                                                        $cleanAdminPhone = preg_replace('/[^0-9+]/', '', $admin->phone_number);
+                                                        $cleanAdminWa = preg_replace('/^0/', '62', preg_replace('/[^0-9]/', '', $admin->phone_number));
+                                                    @endphp
+                                                    <div class="flex items-center gap-1.5">
+                                                        <a href="tel:{{ $cleanAdminPhone }}"
+                                                           title="Hubungi telepon: {{ $admin->phone_number }}"
+                                                           class="inline-flex items-center gap-1.5 text-xs font-semibold text-[#1E1B18] hover:text-[#FF6B00] transition group">
+                                                            <span class="w-6 h-6 rounded-lg bg-[#ECFDF5] group-hover:bg-[#FFF7ED] text-[#10B981] group-hover:text-[#FF6B00] flex items-center justify-center transition shrink-0">
+                                                                <svg class="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                                </svg>
+                                                            </span>
+                                                            <span class="group-hover:underline">{{ $admin->phone_number }}</span>
+                                                        </a>
+
+                                                        @if(str_starts_with($cleanAdminPhone, '08') || str_starts_with($cleanAdminPhone, '+628') || str_starts_with($cleanAdminPhone, '628'))
+                                                            <a href="https://wa.me/{{ $cleanAdminWa }}"
+                                                               target="_blank"
+                                                               rel="noopener noreferrer"
+                                                               title="Hubungi via WhatsApp ({{ $admin->phone_number }})"
+                                                               class="w-6 h-6 rounded-lg bg-emerald-50 hover:bg-emerald-100 text-emerald-600 flex items-center justify-center transition shrink-0">
+                                                                <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                                                    <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.971.53 1.968.815 2.796.815 3.182 0 5.768-2.586 5.768-5.766 0-3.18-2.586-5.766-5.768-5.766zm9.969 5.766c0 5.514-4.486 10-10 10-1.748 0-3.385-.45-4.819-1.238l-7.181 1.882 1.916-6.997c-.88-1.488-1.396-3.23-1.396-5.087 0-5.514 4.486-10 10-10 5.514 0 10 4.486 10 10z"/>
+                                                                </svg>
+                                                            </a>
+                                                        @endif
+                                                    </div>
+                                                @else
+                                                    <span class="text-xs text-[#6E675F] italic">-</span>
+                                                @endif
+
+                                                @if($admin->branch?->phone && $admin->branch->phone !== $admin->phone_number)
+                                                    @php
+                                                        $cleanBranchPhone = preg_replace('/[^0-9+]/', '', $admin->branch->phone);
+                                                    @endphp
+                                                    <div class="text-[11px] text-[#6E675F] flex items-center gap-1">
+                                                        <span class="font-medium text-[10px] uppercase tracking-wider text-[#9CA3AF]">Kantor:</span>
+                                                        <a href="tel:{{ $cleanBranchPhone }}"
+                                                           title="Hubungi telepon kantor cabang: {{ $admin->branch->phone }}"
+                                                           class="font-mono text-[#6E675F] hover:text-[#FF6B00] hover:underline transition">
+                                                            {{ $admin->branch->phone }}
+                                                        </a>
+                                                    </div>
+                                                @endif
+                                            </div>
                                         </td>
                                         <td class="py-4 px-6 text-center">
                                             @if($admin->status === 'active')
@@ -255,18 +365,71 @@
                                     @endif
                                 </div>
 
-                                <div class="flex items-center justify-between pt-2 border-t border-[#FAF8F5] text-xs">
-                                    <div class="text-[#6E675F]">
-                                        {{ $admin->branch?->name ?? 'Tanpa Cabang' }}
+                                <!-- Fields: Cabang, Kota, Telepon -->
+                                <div class="grid grid-cols-2 gap-2 pt-2 border-t border-[#FAF8F5] text-xs font-quicksand bg-[#FAF8F5]/60 p-2.5 rounded-xl border border-[#EBE5DF]/60">
+                                    <div>
+                                        <span class="text-[#6E675F] text-[10px] uppercase font-bold tracking-wider block">Cabang & Kota</span>
+                                        <span class="font-semibold text-[#1E1B18] truncate block">{{ $admin->branch?->name ?? 'Tanpa Cabang' }}</span>
+                                        @if($admin->branch?->city)
+                                            <span class="text-[#FF6B00] text-[11px] font-medium flex items-center gap-0.5 mt-0.5">
+                                                📍 {{ $admin->branch->city }}
+                                            </span>
+                                        @endif
                                     </div>
+                                    <div>
+                                        <span class="text-[#6E675F] text-[10px] uppercase font-bold tracking-wider block">Nomor Telepon</span>
+                                        @if($admin->phone_number)
+                                            @php
+                                                $cleanAdminPhone = preg_replace('/[^0-9+]/', '', $admin->phone_number);
+                                                $cleanAdminWa = preg_replace('/^0/', '62', preg_replace('/[^0-9]/', '', $admin->phone_number));
+                                            @endphp
+                                            <div class="flex items-center gap-1.5 mt-0.5">
+                                                <a href="tel:{{ $cleanAdminPhone }}"
+                                                   title="Hubungi telepon: {{ $admin->phone_number }}"
+                                                   class="font-semibold text-[#1E1B18] hover:text-[#FF6B00] hover:underline flex items-center gap-1">
+                                                    <svg class="w-3 h-3 text-[#10B981] shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                                                    </svg>
+                                                    <span>{{ $admin->phone_number }}</span>
+                                                </a>
+                                                @if(str_starts_with($cleanAdminPhone, '08') || str_starts_with($cleanAdminPhone, '+628') || str_starts_with($cleanAdminPhone, '628'))
+                                                    <a href="https://wa.me/{{ $cleanAdminWa }}"
+                                                       target="_blank"
+                                                       rel="noopener noreferrer"
+                                                       title="Chat via WhatsApp"
+                                                       class="p-0.5 rounded text-emerald-600 hover:text-emerald-700 hover:bg-emerald-50 transition">
+                                                        <svg class="w-3.5 h-3.5" fill="currentColor" viewBox="0 0 24 24">
+                                                            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.971.53 1.968.815 2.796.815 3.182 0 5.768-2.586 5.768-5.766 0-3.18-2.586-5.766-5.768-5.766zm9.969 5.766c0 5.514-4.486 10-10 10-1.748 0-3.385-.45-4.819-1.238l-7.181 1.882 1.916-6.997c-.88-1.488-1.396-3.23-1.396-5.087 0-5.514 4.486-10 10-10 5.514 0 10 4.486 10 10z"/>
+                                                        </svg>
+                                                    </a>
+                                                @endif
+                                            </div>
+                                        @else
+                                            <span class="text-xs text-[#6E675F] italic block mt-0.5">-</span>
+                                        @endif
+                                        @if($admin->branch?->phone && $admin->branch->phone !== $admin->phone_number)
+                                            @php
+                                                $cleanBranchPhone = preg_replace('/[^0-9+]/', '', $admin->branch->phone);
+                                            @endphp
+                                            <a href="tel:{{ $cleanBranchPhone }}"
+                                               title="Hubungi telepon kantor cabang"
+                                               class="text-[#6E675F] hover:text-[#FF6B00] text-[10px] block mt-1 truncate hover:underline">
+                                                Kantor: {{ $admin->branch->phone }}
+                                            </a>
+                                        @endif
+                                    </div>
+                                </div>
+
+                                <div class="flex items-center justify-between pt-1 text-xs">
+                                    <span class="text-[11px] text-[#6E675F]">Terdaftar: {{ $admin->created_at->format('d M Y') }}</span>
                                     <div class="flex items-center gap-2">
                                         <a href="{{ route('admin.admins.edit', $admin) }}"
-                                           class="px-2.5 py-1 text-xs font-montserrat font-bold rounded-lg bg-[#FFF7ED] text-[#FF6B00]">
+                                           class="px-2.5 py-1 text-xs font-montserrat font-bold rounded-lg bg-[#FFF7ED] text-[#FF6B00] border border-[#FED7AA]">
                                             Edit
                                         </a>
                                         <button type="button"
                                                 onclick="handleDeleteAdmin('{{ $admin->id }}', '{{ addslashes($admin->name) }}')"
-                                                class="px-2.5 py-1 text-xs font-montserrat font-bold rounded-lg bg-[#FEF2F2] text-[#DC2626]">
+                                                class="px-2.5 py-1 text-xs font-montserrat font-bold rounded-lg bg-[#FEF2F2] text-[#DC2626] border border-[#FECACA]">
                                             Hapus
                                         </button>
                                     </div>
