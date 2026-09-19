@@ -55,8 +55,12 @@
         @endif
 
         <!-- Article Body -->
-        <article class="bg-white border border-[#EBE5DF] rounded-3xl p-6 sm:p-8 shadow-sm text-[#1E1B18] text-sm sm:text-base leading-relaxed space-y-4 font-quicksand">
-            {!! nl2br(e($post->content)) !!}
+        <article class="news-content bg-white border border-[#EBE5DF] rounded-3xl p-6 sm:p-8 shadow-sm text-[#1E1B18] text-sm sm:text-base leading-relaxed font-quicksand">
+            @if(Str::contains($post->content, '<'))
+                {!! $post->content !!}
+            @else
+                {!! nl2br(e($post->content)) !!}
+            @endif
         </article>
 
         <!-- Social Share / Action -->
@@ -94,4 +98,91 @@
             </div>
         @endif
     </div>
+
+    <style>
+        .news-content h1 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.875rem;
+            line-height: 2.25rem;
+            font-weight: 800;
+            color: #1E1B18;
+            margin-top: 1.5rem;
+            margin-bottom: 0.75rem;
+        }
+        .news-content h2 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.5rem;
+            line-height: 2rem;
+            font-weight: 800;
+            color: #1E1B18;
+            margin-top: 1.25rem;
+            margin-bottom: 0.5rem;
+        }
+        .news-content h3 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.25rem;
+            line-height: 1.75rem;
+            font-weight: 700;
+            color: #1E1B18;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .news-content h4 {
+            font-family: 'Montserrat', sans-serif;
+            font-size: 1.125rem;
+            line-height: 1.5rem;
+            font-weight: 700;
+            color: #1E1B18;
+            margin-top: 0.75rem;
+            margin-bottom: 0.25rem;
+        }
+        .news-content p {
+            margin-bottom: 0.85rem;
+            line-height: 1.75;
+        }
+        .news-content ul {
+            list-style-type: disc !important;
+            padding-left: 1.75rem !important;
+            margin-bottom: 1rem !important;
+        }
+        .news-content ol {
+            list-style-type: decimal !important;
+            padding-left: 1.75rem !important;
+            margin-bottom: 1rem !important;
+        }
+        .news-content li {
+            margin-bottom: 0.35rem;
+            line-height: 1.6;
+        }
+        .news-content blockquote {
+            border-left: 4px solid #FF6B00;
+            padding: 0.75rem 1.25rem;
+            margin: 1.25rem 0;
+            background-color: #FAF8F5;
+            border-radius: 0 1rem 1rem 0;
+            font-style: italic;
+            color: #6E675F;
+        }
+        .news-content a {
+            color: #FF6B00;
+            text-decoration: underline;
+            font-weight: 600;
+        }
+        .news-content a:hover {
+            color: #EA580C;
+        }
+        .news-content hr {
+            border: 0;
+            border-top: 1px solid #EBE5DF;
+            margin: 1.5rem 0;
+        }
+        .news-content .callout-box {
+            padding: 1rem 1.25rem;
+            margin: 1rem 0;
+            background-color: #FFF7ED;
+            border: 1px solid #FED7AA;
+            border-radius: 1rem;
+            color: #9A3412;
+        }
+    </style>
 </x-app-layout>

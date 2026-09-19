@@ -157,5 +157,81 @@ class AdminCabangManagementTest extends TestCase
         $response->assertRedirect(route('admin.branches.create'));
         $response->assertSessionHas('info');
     }
+
+    public function test_super_admin_can_view_city_and_phone_fields_in_admin_list(): void
+    {
+        $this->adminCabang->update([
+            'phone_number' => '0812-9999-8888',
+        ]);
+
+        $response = $this->actingAs($this->superAdmin)
+            ->get(route('admin.admins.index'));
+
+        $response->assertOk();
+        $response->assertSee('Kota');
+        $response->assertSee('Nomor Telepon');
+        $response->assertSee('Surabaya');
+        $response->assertSee('0812-9999-8888');
+        $response->assertSee('tel:081299998888');
+    }
+
+    public function test_super_admin_can_filter_admins_by_city(): void
+    {
+        $branchBandung = Branch::create([
+            'name' => 'Cabang Bandung',
+            'code' => 'CBG-BDG',
+            'address' => 'Jl. Asia Afrika No. 10',
+            'city' => 'Bandung',
+            'is_active' => true,
+        ]);
+
+        $adminBandung = User::factory()->create([
+            'name' => 'Admin Bandung',
+            'email' => 'admin.bdg@test.com',
+            'branch_id' => $branchBandung->id,
+            'status' => 'active',
+        ]);
+        $adminBandung->assignRole('admin-cabang');
+
+        // Filter Kota Bandung
+        $response = $this->actingAs($this->superAdmin)
+            ->get(route('admin.admins.index', ['city' => 'Bandung']));
+
+        $response->assertOk();
+        $response->assertSee('Admin Bandung');
+        $response->assertDontSee('Admin Surabaya');
+
+        // Filter Kota Surabaya
+        $responseSurabaya = $this->actingAs($this->superAdmin)
+            ->get(route('admin.admins.index', ['city' => 'Surabaya']));
+
+        $responseSurabaya->assertOk();
+        $responseSurabaya->assertSee('Admin Surabaya');
+        $responseSurabaya->assertDontSee('Admin Bandung');
+    }
+
+    public function test_super_admin_can_filter_admins_by_phone(): void
+    {
+        $this->adminCabang->update([
+            'phone_number' => '0811-2233-4455',
+        ]);
+
+        $otherAdmin = User::factory()->create([
+            'name' => 'Admin Lain',
+            'email' => 'admin.lain@test.com',
+            'branch_id' => $this->branch->id,
+            'phone_number' => '0899-7777-6666',
+            'status' => 'active',
+        ]);
+        $otherAdmin->assignRole('admin-cabang');
+
+        // Filter nomor telepon spesifik
+        $response = $this->actingAs($this->superAdmin)
+            ->get(route('admin.admins.index', ['phone' => '0811-2233']));
+
+        $response->assertOk();
+        $response->assertSee('Admin Surabaya');
+        $response->assertDontSee('Admin Lain');
+    }
 }
 

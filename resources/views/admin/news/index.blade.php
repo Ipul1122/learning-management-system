@@ -1,25 +1,28 @@
 <x-app-layout>
-    <x-slot name="header">
-        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
-            <div>
-                <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold font-montserrat bg-[#FFF7ED] text-[#EA580C] border border-[#FED7AA] mb-1">
-                    <span class="w-2 h-2 rounded-full bg-[#EA580C]"></span>
-                    Manajemen Konten Publikasi
-                </span>
-                <h2 class="font-montserrat font-extrabold text-2xl text-[#1E1B18] leading-tight">
-                    Kelola Berita & Pengumuman
-                </h2>
-            </div>
-            <div>
-                <a href="{{ route('admin.news.create') }}" class="px-4 py-2.5 bg-gradient-to-r from-[#FF6B00] to-[#E11D48] hover:from-[#EA580C] hover:to-[#DC2626] text-white rounded-xl text-xs font-bold font-montserrat shadow-md shadow-orange-500/10 transition flex items-center gap-1.5">
-                    <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    <span>Tulis Berita Baru</span>
-                </a>
-            </div>
-        </div>
-    </x-slot>
+    <div class="py-8">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 space-y-6">
 
-    <div class="py-6 space-y-6">
+            <!-- Header Section -->
+            <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4">
+                <div>
+                    <div class="inline-flex items-center gap-1.5 px-3 py-1 rounded-full text-xs font-bold font-montserrat bg-[#FFF7ED] text-[#EA580C] border border-[#FED7AA] mb-2">
+                        <span class="w-2 h-2 rounded-full bg-[#EA580C]"></span>
+                        Manajemen Konten Publikasi
+                    </div>
+                    <h1 class="font-montserrat font-extrabold text-2xl sm:text-3xl text-[#1E1B18] tracking-tight">
+                        Kelola Berita & Pengumuman
+                    </h1>
+                    <p class="font-quicksand text-sm text-[#6E675F] mt-1">
+                        Publikasikan informasi, materi edukasi, dan pengumuman resmi ke seluruh cabang atau skala nasional.
+                    </p>
+                </div>
+                <div>
+                    <a href="{{ route('admin.news.create') }}" class="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl font-montserrat font-bold text-sm text-white bg-gradient-to-r from-[#FF6B00] to-[#E11D48] hover:from-[#EA580C] hover:to-[#DC2626] shadow-md hover:shadow-lg transition-all duration-200 transform hover:-translate-y-0.5">
+                        <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                        <span>Tulis Berita Baru</span>
+                    </a>
+                </div>
+            </div>
         <!-- Flash Alert -->
         @if(session('success'))
             <div class="p-4 rounded-xl bg-emerald-50 border border-emerald-200 text-emerald-800 text-xs font-medium flex items-center gap-2 shadow-sm">
@@ -140,4 +143,5 @@
             @endif
         </div>
     </div>
+</div>
 </x-app-layout>

@@ -56,6 +56,7 @@ class BranchManagementTest extends TestCase
         $response->assertOk();
         $response->assertSee('Master Kantor Cabang');
         $response->assertSee($this->branch->name);
+        $response->assertSee('tel:0215551234');
     }
 
     public function test_non_super_admin_cannot_access_branch_index_page(): void

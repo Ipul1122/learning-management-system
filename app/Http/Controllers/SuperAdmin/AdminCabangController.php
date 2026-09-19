@@ -22,19 +22,43 @@ class AdminCabangController extends Controller
     {
         $query = User::adminCabangs()->with('branch');
 
-        // Pencarian nama, email, nomor telepon
+        // Pencarian nama, email, nomor telepon, atau data cabang (nama, kota, telp)
         if ($request->filled('search')) {
             $search = $request->input('search');
             $query->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%")
-                    ->orWhere('phone_number', 'like', "%{$search}%");
+                    ->orWhere('phone_number', 'like', "%{$search}%")
+                    ->orWhereHas('branch', function ($bq) use ($search) {
+                        $bq->where('name', 'like', "%{$search}%")
+                            ->orWhere('city', 'like', "%{$search}%")
+                            ->orWhere('phone', 'like', "%{$search}%");
+                    });
             });
         }
 
         // Filter berdasarkan cabang penugasan
         if ($request->filled('branch_id')) {
             $query->where('branch_id', $request->input('branch_id'));
+        }
+
+        // Filter berdasarkan kota cabang
+        if ($request->filled('city')) {
+            $city = $request->input('city');
+            $query->whereHas('branch', function ($q) use ($city) {
+                $q->where('city', $city);
+            });
+        }
+
+        // Filter spesifik nomor telepon (HP admin atau telepon kantor cabang)
+        if ($request->filled('phone')) {
+            $phone = $request->input('phone');
+            $query->where(function ($q) use ($phone) {
+                $q->where('phone_number', 'like', "%{$phone}%")
+                    ->orWhereHas('branch', function ($bq) use ($phone) {
+                        $bq->where('phone', 'like', "%{$phone}%");
+                    });
+            });
         }
 
         // Filter status keaktifan akun
@@ -52,7 +76,13 @@ class AdminCabangController extends Controller
 
         $branches = Branch::orderBy('name')->get();
 
-        return view('super-admin.admins.index', compact('admins', 'stats', 'branches'));
+        $cities = Branch::whereNotNull('city')
+            ->where('city', '!=', '')
+            ->distinct()
+            ->orderBy('city')
+            ->pluck('city');
+
+        return view('super-admin.admins.index', compact('admins', 'stats', 'branches', 'cities'));
     }
 
     /**
